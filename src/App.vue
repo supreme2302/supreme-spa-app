@@ -1,91 +1,100 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      persistent
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      v-model="drawer"
-      enable-resize-watcher
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile
-          value="true"
-          v-for="(item, i) in items"
-          :key="i"
+    <!--Navigation drawer-->
+      <v-navigation-drawer
+        v-model="drawer"
+        temporary
+        app
+      >
+        <!--Avatar in drawer-->
+        <v-toolbar flat class="transparent">
+          <v-list class="pa-0">
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" >
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>Supreme S.S</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-toolbar>
+        <!--End of avatar in drawer-->
+
+        <!--Links of drawer-->
+        <v-list class="pt-0" dense>
+          <v-divider/>
+          <v-list-tile
+            v-for="link in links"
+            :key="link.title"
+            @click="">
+            <v-list-tile-action>
+              <v-icon>{{ link.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>{{ link.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+        <!--End of links of drawer-->
+      </v-navigation-drawer>
+    <!--End of navigation drawer-->
+
+    <!--Navbar-->
+    <v-toolbar app dark>
+      <v-toolbar-side-icon
+        @click="drawer = !drawer"
+        class="hidden-md-and-up"
+      />
+      <v-toolbar-title>Supreme</v-toolbar-title>
+      <v-spacer/>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn
+          v-for="link in links"
+          :key="link.title"
+          :to="link.url"
+          flat
         >
-          <v-list-tile-action>
-            <v-icon v-html="item.icon"></v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar
-      app
-      :clipped-left="clipped"
-    >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon v-html="miniVariant ? 'chevron_right' : 'chevron_left'"></v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>web</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>remove</v-icon>
-      </v-btn>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>menu</v-icon>
-      </v-btn>
+          <v-icon left> {{ link.icon }} </v-icon>
+          {{ link.title }}
+        </v-btn>
+      </v-toolbar-items>
     </v-toolbar>
+    <!--End of navbar-->
+
     <v-content>
-      <router-view/>
+      <router-view name="bodyWrap"/>
     </v-content>
-    <v-navigation-drawer
-      temporary
-      :right="right"
-      v-model="rightDrawer"
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-tile @click="right = !right">
-          <v-list-tile-action>
-            <v-icon>compare_arrows</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2017</span>
-    </v-footer>
   </v-app>
+
 </template>
 
 <script>
 export default {
   data () {
     return {
-      clipped: false,
-      drawer: true,
-      fixed: false,
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Vuetify.js'
+      drawer: false
     };
   },
-  name: 'App'
+  methods: {
+
+  },
+  computed: {
+    links () {
+      return [
+        {
+          title: 'Sign In',
+          icon: 'lock',
+          url: 'signin'
+        },
+        {
+          title: 'Sign Up',
+          icon: 'face',
+          url: 'signup'
+        }
+
+      ];
+    }
+  }
 };
 </script>
