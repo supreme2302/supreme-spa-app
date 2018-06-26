@@ -46,7 +46,9 @@
         @click="drawer = !drawer"
         class="hidden-md-and-up"
       />
-      <v-toolbar-title>Supreme</v-toolbar-title>
+      <v-toolbar-title>
+        <router-link to="/" tag="span" class="pointer"> Supreme </router-link>
+      </v-toolbar-title>
       <v-spacer/>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
@@ -85,12 +87,17 @@ export default {
         {
           title: 'Sign In',
           icon: 'lock',
-          url: 'signin'
+          url: '/auth'
         },
         {
           title: 'Sign Up',
           icon: 'face',
-          url: 'signup'
+          url: '/signup'
+        },
+        {
+          title: 'Profile',
+          icon: 'person',
+          url: '/profile'
         }
 
       ];
@@ -98,3 +105,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+  .pointer {
+    cursor: pointer;
+  }
+</style>

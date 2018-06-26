@@ -11,7 +11,7 @@
             :key="i"
             hover
             class="kaka"
-            :to="'/' + i"
+            :to="'/id/' + i"
           >
             <v-layout row>
               <v-flex xs4 sm3 md2>
