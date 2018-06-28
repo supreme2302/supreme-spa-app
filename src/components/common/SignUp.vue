@@ -7,19 +7,28 @@
             <v-toolbar-title>Sign Up</v-toolbar-title>
             <v-spacer/>
           </v-toolbar>
-          <v-card-text>
-            <v-form>
+          <v-card-text @keyup.enter="onSubmit">
+            <v-form validate v-model="valid" ref="form">
               <v-text-field
-                prepend-icon="person"
-                name="login"
-                label="Sign In"
-                type="text"/>
+                autofocus
+                v-model="email"
+                :rules="emailRules"
+                prepend-icon="email"
+                name="email" label="E-mail"
+                type="email"
+              />
               <v-text-field
+                v-model="password"
+                :rules="passwordRules"
+                :counter="8"
                 prepend-icon="lock"
                 name="password"
                 label="Password"
                 type="password"/>
               <v-text-field
+                v-model="confirmPassword"
+                :rules="confirmPasswordRules"
+                :counter="8"
                 prepend-icon="lock"
                 name="ConfirmPassword"
                 label="Confirm Password"
@@ -28,7 +37,13 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn dark>Sign Up</v-btn>
+            <v-btn
+              color="grey darken-4 hover"
+              :disabled="!valid"
+              @click="onSubmit"
+            >
+              <span class="btn-color">Sign in</span>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -38,9 +53,46 @@
 
 <script>
   export default {
+    data () {
+      return {
+        valid: false,
+        email: '',
+        password: '',
+        confirmPassword: '',
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        ],
+        passwordRules: [
+          v => !!v || 'Password is required',
+          v => v.length >= 8 || 'Password must be not less than 8 characters'
+        ],
+        confirmPasswordRules: [
+          v => !!v || 'Password is required',
+          v => v.length >= 8 || 'Password must be not less than 8 characters',
+          v => v === this.password || 'Password do not match'
+        ]
+      };
+    },
+    methods: {
+      onSubmit () {
+        if (this.$refs.form.validate()) {
+          const data = {
+            email: this.email,
+            password: this.password
+          };
+          console.log(data);
+        }
+      }
+    }
   };
 </script>
 
 <style scoped>
-
+  .btn-color {
+    color: #fff;
+  }
+  .hover:hover {
+    background: #424242!important;
+  }
 </style>

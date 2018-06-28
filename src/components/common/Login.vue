@@ -7,23 +7,36 @@
             <v-toolbar-title>Sign In</v-toolbar-title>
             <v-spacer/>
           </v-toolbar>
-          <v-card-text>
-            <v-form>
+          <v-card-text @keyup.enter="onSubmit">
+            <v-form ref="form" validate v-model="valid">
               <v-text-field
+                autofocus
+                v-model="email"
+                :rules="emailRules"
                 prepend-icon="person"
                 name="email"
                 label="E-mail"
                 type="E-mail"/>
               <v-text-field
+                v-model="password"
+                :rules="passwordRules"
                 prepend-icon="lock"
                 name="password"
                 label="Password"
-                type="password"/>
+                type="password"
+                :counter="8"
+              />
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer/>
-            <v-btn dark>Sign In</v-btn>
+            <v-btn
+              color="grey darken-4 hover"
+              :disabled="!valid"
+              @click="onSubmit"
+            >
+              <span class="btn-color">Sign in</span>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -33,10 +46,40 @@
 
 <script>
   export default {
-
+    data () {
+      return {
+        valid: false,
+        email: '',
+        password: '',
+        emailRules: [
+          v => !!v || 'E-mail is required',
+          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        ],
+        passwordRules: [
+          v => !!v || 'Password is required',
+          v => v.length >= 8 || 'Password must be not less than 8 characters'
+        ]
+      };
+    },
+    methods: {
+      onSubmit () {
+        if (this.$refs.form.validate()) {
+          const data = {
+            email: this.email,
+            password: this.password
+          };
+          console.log(data);
+        }
+      }
+    }
   };
 </script>
 
 <style scoped>
-
+  .btn-color {
+    color: #fff;
+  }
+  .hover:hover {
+    background: #424242!important;
+  }
 </style>
