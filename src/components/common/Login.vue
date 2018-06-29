@@ -68,7 +68,7 @@
             email: this.email,
             password: this.password
           };
-          console.log(data);
+          this.$store.dispatch('signIn', data);
         }
       }
     }

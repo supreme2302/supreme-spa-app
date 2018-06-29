@@ -6,6 +6,8 @@ import router from './router';
 import Vuetify from 'vuetify';
 import store from './store';
 import 'vuetify/dist/vuetify.min.css';
+import User from './modules/userModel';
+import bus from './modules/bus';
 
 Vue.use(Vuetify);
 
@@ -17,5 +19,20 @@ new Vue({
   store,
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  created () {
+    this.$store.dispatch('renderPermission', false);
+    User.auth()
+      .then(
+        user => {
+          if (user) {
+            this.$store.dispatch('autoSignIn', user);
+            // bus.emit('onAuth', user);
+          }
+          this.$store.dispatch('renderPermission', true);
+          bus.emit('onAuth', user);
+        }
+      );
+    this.$store.dispatch('fetchUsers');
+  }
 });

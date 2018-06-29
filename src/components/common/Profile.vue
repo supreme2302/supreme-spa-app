@@ -151,7 +151,6 @@
           </v-btn>
         </v-flex>
       </v-layout>
-
     </v-flex>
   </v-layout>
 </template>
@@ -170,7 +169,7 @@
         ],
         phoneRules: [
           v => !!v || 'Password is required',
-          v => /^[0-9]+$/.test(v) || 'In field must be only numbers',
+          v => /^[0-9]+$/.test(v) || 'In field must be only numbers'
         ]
       };
     },

@@ -5,7 +5,8 @@ import UserPage from '../components/leftSide/UserPage.vue';
 import Login from '../components/common/Login.vue';
 import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
-
+import AuthGuard from './auth-guard.js';
+// import AuthGuardBeforeLogin from './auth-guard-before-login.js';
 Vue.use(Router);
 
 export default new Router({
@@ -30,18 +31,21 @@ export default new Router({
       components: {
         bodyWrap: Login
       }
+      // beforeEnter: AuthGuardBeforeLogin
     },
     {
       path: '/signup',
       components: {
         bodyWrap: SignUp
       }
+      // beforeEnter: AuthGuardBeforeLogin
     },
     {
       path: '/profile',
       components: {
         bodyWrap: Profile
-      }
+      },
+      beforeEnter: AuthGuard
     }
   ],
   mode: 'history'

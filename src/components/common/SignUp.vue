@@ -18,6 +18,14 @@
                 type="email"
               />
               <v-text-field
+                v-model="username"
+                :rules="usernameRules"
+                prepend-icon="person"
+                name="username" label="Username"
+                type="text"
+                :counter="3"
+              />
+              <v-text-field
                 v-model="password"
                 :rules="passwordRules"
                 :counter="8"
@@ -57,11 +65,16 @@
       return {
         valid: false,
         email: '',
+        username: '',
         password: '',
         confirmPassword: '',
         emailRules: [
           v => !!v || 'E-mail is required',
           v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        ],
+        usernameRules: [
+          v => !!v || 'Username is required',
+          v => v.length >= 3 || 'Username must be not less than 3 characters'
         ],
         passwordRules: [
           v => !!v || 'Password is required',
@@ -79,9 +92,11 @@
         if (this.$refs.form.validate()) {
           const data = {
             email: this.email,
-            password: this.password
+            username: this.username,
+            password: this.password,
+            confirmPassword: this.confirmPassword
           };
-          console.log(data);
+          this.$store.dispatch('signUpUser', data);
         }
       }
     }
