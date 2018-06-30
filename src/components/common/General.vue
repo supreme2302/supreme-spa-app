@@ -40,6 +40,11 @@
       users () {
         return this.$store.getters.users;
       }
+    },
+    methods: {
+      // onOpenCard (id) {
+      //   this.$store.dispatch('openCard', id);
+      // }
     }
   };
 </script>
@@ -49,4 +54,5 @@
     background: gainsboro;
     transition: .5s;
   }
+
 </style>

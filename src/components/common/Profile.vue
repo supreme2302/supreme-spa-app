@@ -12,31 +12,30 @@
           <div>
             <p class="text--primary">E-mail: {{user.email}}</p>
             <p class="text--primary">Phone: {{user.phone}}</p>
-            <p class="text--primary">Skills: {{user.about}}</p>
+            <p class="text--primary">Skills: {{user.skills}}</p>
+            <p class="text--primary">About: {{user.about}}</p>
           </div>
         </v-card-title>
         <div class="hidden-sm-and-up">
           <v-card-text class="pb-0 pt-0">
             <v-form v-model="valid" ref="form" validation>
               <v-text-field
-                prepend-icon="mail"
-                name="email"
-                placeholder="E-mail"
-                type="email"
-                class="pt-0"
-                required
-                :rules="emailRules"
-                v-model="email"
-              />
-              <v-text-field
                 prepend-icon="phone"
                 name="phone"
                 placeholder="Phone"
                 type="text"
                 class="pt-0"
-                required
                 :rules="phoneRules"
                 v-model="phone"
+              />
+              <v-text-field
+                prepend-icon="bubble_chart"
+                name="skills"
+                placeholder="Skills"
+                type="text"
+                class="pt-0"
+                :rules="skillsRules"
+                v-model="skills"
               />
               <v-text-field
                 prepend-icon="info"
@@ -45,7 +44,6 @@
                 placeholder="About"
                 type="text"
                 class="pt-0"
-                required
                 :rules="[v => !!v || 'Description is required']"
                 v-model="about"
               />
@@ -93,22 +91,22 @@
         <v-card-text class="pb-0">
           <v-form v-model="valid" ref="form" validation>
             <v-text-field
-              prepend-icon="mail"
-              name="email"
-              label="E-mail"
-              type="email"
-              required
-              :rules="emailRules"
-              v-model="email"
-            />
-            <v-text-field
               prepend-icon="phone"
               name="phone"
-              label="Phone"
+              placeholder="Phone"
               type="text"
-              required
+              class="pt-0"
               :rules="phoneRules"
               v-model="phone"
+            />
+            <v-text-field
+              prepend-icon="bubble_chart"
+              name="skills"
+              placeholder="Skills"
+              type="text"
+              class="pt-0"
+              :rules="skillsRules"
+              v-model="skills"
             />
             <v-text-field
               prepend-icon="info"
@@ -116,7 +114,6 @@
               name="about"
               label="About"
               type="text"
-              required
               :rules="[v => !!v || 'Description is required!']"
               v-model="about"/>
           </v-form>
@@ -165,12 +162,11 @@
       return {
         phone: '',
         about: '',
-        email: '',
+        skills: '',
         valid: false,
         add: false,
-        emailRules: [
-          v => !!v || 'E-mail is required',
-          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+        skillsRules: [
+          v => !!v || 'Skills are required'
         ],
         phoneRules: [
           v => !!v || 'Password is required',
@@ -182,7 +178,7 @@
       onSubmit () {
         if (this.$refs.form.validate()) {
           const data = {
-            email: this.email,
+            skills: this.skills,
             phone: this.phone,
             about: this.about,
             onpage: this.add

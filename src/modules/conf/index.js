@@ -2,7 +2,7 @@ const serverUrl = 'http://localhost:5000/';
 
 /**
  * Contains methods' paths of user API
- * @type {{login: string, signup: string, logout: string, user: string, updateUser: string, leaderBoard: string}}
+ * @type {{signin: string, signup: string, logout: string, user: string, updateUser: string, usersList: string, userCard: string}}
  */
 const userAPIMethods = {
   signin: 'users/auth',

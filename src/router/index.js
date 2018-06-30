@@ -6,6 +6,7 @@ import Login from '../components/common/Login.vue';
 import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
 import AuthGuard from './auth-guard.js';
+import AuthGuardLoad from './auth-guard-load.js';
 // import AuthGuardBeforeLogin from './auth-guard-before-login.js';
 Vue.use(Router);
 
@@ -22,7 +23,8 @@ export default new Router({
           props: true,
           components: {
             leftWrap: UserPage
-          }
+          },
+          beforeEnter: AuthGuardLoad
         }
       ]
     },

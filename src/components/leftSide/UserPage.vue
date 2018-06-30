@@ -12,15 +12,15 @@
       </v-flex>
       <v-flex xs9 class="mt-4">
         <v-card-text>
-          <h2 class="text--primary">Lorem ipsum.</h2>
+          <h2 class="text--primary">{{userCard.username}}</h2>
           <v-divider/>
-          <p>Some descr1: Lorem ipsum dolor.</p>
+          <p>E-mail: {{userCard.email}}</p>
           <v-divider/>
-          <p>Some descr2: Lorem ipsum dolor.</p>
+          <p>Phone: {{userCard.phone}}</p>
           <v-divider/>
-          <p>Some descr3: Lorem ipsum dolor.</p>
+          <p>Skills: {{userCard.skills}}</p>
           <v-divider/>
-          <p>Some descr4: Lorem ipsum dolor.</p>
+          <p>About: {{userCard.about}}</p>
           <v-divider/>
         </v-card-text>
       </v-flex>
@@ -30,7 +30,15 @@
 
 <script>
   export default {
-
+    computed: {
+      userCard () {
+        return this.$store.getters.userCard;
+      }
+    },
+    beforeRouteUpdate (to, from, next) {
+      const id = Number(to.params.id);
+      this.$store.dispatch('openCard', {id, next});
+    }
   };
 </script>
 

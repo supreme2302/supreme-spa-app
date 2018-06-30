@@ -15,6 +15,7 @@ export default class User {
     this.phone = data.phone;
     this.id = data.id;
     this.about = data.about;
+    this.skills = data.skills;
   }
 
   /**
@@ -151,5 +152,9 @@ export default class User {
         resolve(User.auth());
       });
     });
+  }
+
+  static getCard (id, callbackfn) {
+    return http.get(route.userAPIMethods.userCard + '/' + id.toString(), callbackfn);
   }
 }

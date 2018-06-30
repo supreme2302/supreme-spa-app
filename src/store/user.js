@@ -4,7 +4,8 @@ import router from '../router';
 export default {
   state: {
     users: [],
-    user: null
+    user: null,
+    userCard: null
   },
   mutations: {
     setUser (state, user) {
@@ -15,9 +16,34 @@ export default {
     },
     addInList (state, user) {
       state.users.push(user);
+    },
+    setUserCard (state, userCard) {
+      state.userCard = userCard;
     }
   },
   actions: {
+    openCard ({commit}, payload) {
+      const id = payload.id;
+      commit('clearError');
+      const userId = JSON.stringify(id);
+      User.getCard(userId, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                commit('setError', resErr.message);
+              }
+            );
+        } else {
+          resp.then(
+            userData => {
+              payload.next();
+              commit('setUserCard', userData);
+            }
+          );
+        }
+      });
+    },
     autoSignIn ({commit}, payload) {
       commit('setUser', payload);
     },
@@ -125,6 +151,7 @@ export default {
   getters: {
     users: state => state.users,
     user: state => state.user,
-    isUserLoggedIn: state => state.user !== null
+    isUserLoggedIn: state => state.user !== null,
+    userCard: state => state.userCard
   }
 };

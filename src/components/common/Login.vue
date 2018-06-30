@@ -32,8 +32,9 @@
             <v-spacer/>
             <v-btn
               color="grey darken-4 hover"
-              :disabled="!valid"
+              :disabled="!valid || loading"
               @click="onSubmit"
+              :loading="loading"
             >
               <span class="btn-color">Sign in</span>
             </v-btn>
@@ -70,6 +71,11 @@
           };
           this.$store.dispatch('signIn', data);
         }
+      }
+    },
+    computed: {
+      loading () {
+        return this.$store.getters.loading;
       }
     }
   };
