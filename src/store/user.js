@@ -3,55 +3,18 @@ import router from '../router';
 
 export default {
   state: {
-    users: [
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '1'
-      },
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '2'
-      },
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '3'
-      },
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '0'
-      },
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '5'
-      },
-      {
-        avatar: 'https://avatars0.githubusercontent.com/u/9064066?v=4&s=460',
-        name: 'John Leider',
-        title: 'Welcome to Vuetify.js!',
-        excerpt: 'Thank you for joining our community...',
-        id: '4'
-      }
-    ],
+    users: [],
     user: null
   },
   mutations: {
     setUser (state, user) {
       state.user = user;
+    },
+    setList (state, list) {
+      state.users = list;
+    },
+    addInList (state, user) {
+      state.users.push(user);
     }
   },
   actions: {
@@ -116,6 +79,45 @@ export default {
           error => {
             console.log(error);
             commit('renderPermission', true);
+          }
+        );
+    },
+    fetchUsers ({commit}) {
+      User.fetchUsers(1, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                commit('setError', resErr.message);
+              }
+            );
+        } else {
+          resp.then(
+            list => {
+              commit('setList', list);
+            }
+          );
+        }
+      });
+    },
+
+    changeProfile ({commit}, payload) {
+      commit('clearError');
+      commit('setLoading', true);
+      const userData = JSON.stringify(payload);
+      User.changeProfile(userData)
+        .then(
+          user => {
+            commit('setUser', user);
+            commit('setLoading', false);
+            commit('addInList', user);
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+            commit('setLoading', false);
+            commit('setError', error);
           }
         );
     }

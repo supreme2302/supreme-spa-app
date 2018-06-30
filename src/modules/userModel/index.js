@@ -13,6 +13,8 @@ export default class User {
     this.email = data.email;
     this.username = data.username;
     this.phone = data.phone;
+    this.id = data.id;
+    this.about = data.about;
   }
 
   /**
@@ -110,6 +112,33 @@ export default class User {
   static logout () {
     return new Promise((resolve, reject) => {
       http.post(route.userAPIMethods.logout, {}, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                reject(resErr.message);
+              }
+            );
+          return;
+        }
+        resolve(User.auth());
+      });
+    });
+  }
+
+  /**
+   * Loads Rating of all Users
+   * @param page
+   * @param {function} callbackfn
+   * @return {PromiseLike<T>|Promise<T>}
+   */
+  static fetchUsers (page, callbackfn) {
+    return http.get(route.userAPIMethods.usersList + '/' + page.toString(), callbackfn);
+  }
+
+  static changeProfile (userData) {
+    return new Promise((resolve, reject) => {
+      http.post(route.userAPIMethods.updateUser, userData, (err, resp) => {
         if (err) {
           err
             .then(

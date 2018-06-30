@@ -10,9 +10,9 @@
         </v-card-media>
         <v-card-title primary-title class="pb-0">
           <div>
-            <p class="text--primary">E-mail: supreme@s.s</p>
-            <p class="text--primary">Phone: +7-777-777-77-77</p>
-            <p class="text--primary">Skills: Js, Java, Postgresql, C++</p>
+            <p class="text--primary">E-mail: {{user.email}}</p>
+            <p class="text--primary">Phone: {{user.phone}}</p>
+            <p class="text--primary">Skills: {{user.about}}</p>
           </div>
         </v-card-title>
         <div class="hidden-sm-and-up">
@@ -71,12 +71,14 @@
                 class="mt-3 offsets inline"
                 color="grey darken-4"
                 label="Add to main page?"
+                v-model="add"
               />
               <v-btn
                 color="grey darken-4"
                 class="offsets hover"
-                v-bind:disabled="!valid"
+                v-bind:disabled="!valid || loading"
                 @click="onSubmit"
+                :loading="loading"
               >
                 <span class="btn-color">Save</span>
               </v-btn>
@@ -140,12 +142,14 @@
             class="mt-3 offsets inline"
             color="grey darken-4"
             label="Add to main page?"
+            v-model="add"
           />
           <v-btn
             color="grey darken-4"
             class="offsets hover"
-            v-bind:disabled="!valid"
+            v-bind:disabled="!valid || loading"
             @click="onSubmit"
+            :loading="loading"
           >
             <span class="btn-color">Save</span>
           </v-btn>
@@ -163,6 +167,7 @@
         about: '',
         email: '',
         valid: false,
+        add: false,
         emailRules: [
           v => !!v || 'E-mail is required',
           v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
@@ -179,10 +184,19 @@
           const data = {
             email: this.email,
             phone: this.phone,
-            about: this.about
+            about: this.about,
+            onpage: this.add
           };
-          console.log(data);
+          this.$store.dispatch('changeProfile', data);
         }
+      }
+    },
+    computed: {
+      user () {
+        return this.$store.getters.user;
+      },
+      loading () {
+        return this.$store.getters.loading;
       }
     }
   };

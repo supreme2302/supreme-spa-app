@@ -16,14 +16,14 @@
             <v-layout row>
               <v-flex xs4 sm3 md2>
                 <v-card-media
-                  :src="user.avatar"
+                  src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
                   height="45px"
                   class="round mb-1 mt-1 ml-1"
                 />
               </v-flex>
               <v-flex xs8 sm9 md10>
                 <v-card-text>
-                  <strong v-html="user.name"></strong>
+                  <strong v-html="user.username"></strong>
                 </v-card-text>
               </v-flex>
             </v-layout>
