@@ -1,4 +1,5 @@
-const serverUrl = 'http://localhost:5000/';
+// const serverUrl = 'http://localhost:5000/';
+const serverUrl = 'https://supreme-back.herokuapp.com/';
 
 /**
  * Contains methods' paths of user API
