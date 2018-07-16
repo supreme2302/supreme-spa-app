@@ -5,20 +5,24 @@ export default {
   state: {
     users: [],
     user: null,
-    userCard: null
+    userCard: null,
+    page: 1
   },
   mutations: {
     setUser (state, user) {
       state.user = user;
     },
     setList (state, list) {
-      state.users = list;
+      state.users = state.users.concat(list);
     },
     addInList (state, user) {
       state.users.push(user);
     },
     setUserCard (state, userCard) {
       state.userCard = userCard;
+    },
+    nextPage (state, page) {
+      state.page = page;
     }
   },
   actions: {
@@ -110,17 +114,35 @@ export default {
     },
     fetchUsers ({commit}) {
       User.fetchUsers(1, (err, resp) => {
-        if (err) {
-          err
-            .then(
-              resErr => {
-                commit('setError', resErr.message);
-              }
-            );
-        } else {
+        if (!err) {
           resp.then(
-            list => {
-              commit('setList', list);
+            map => {
+              console.log(map);
+              Object.values(map).forEach((value, i) => {
+                if (i === 0) {
+                  commit('nextPage', value);
+                } else {
+                  commit('setList', value);
+                }
+              });
+            }
+          );
+        }
+      });
+    },
+    getNextPageOfList ({commit}, page) {
+      User.fetchUsers(page, (err, resp) => {
+        if (!err) {
+          resp.then(
+            map => {
+              console.log(map);
+              Object.values(map).forEach((value, i) => {
+                if (i === 0) {
+                  commit('nextPage', value);
+                } else {
+                  commit('setList', value);
+                }
+              });
             }
           );
         }
@@ -152,6 +174,7 @@ export default {
     users: state => state.users,
     user: state => state.user,
     isUserLoggedIn: state => state.user !== null,
-    userCard: state => state.userCard
+    userCard: state => state.userCard,
+    page: state => state.page
   }
 };
