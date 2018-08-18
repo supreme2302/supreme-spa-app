@@ -36,7 +36,7 @@
       class="hidden-sm-and-up mtop"
     >
       <v-flex xs12>
-        <v-layout justify-center column>
+        <v-layout justify-center column id="scrollDiv">
           <v-card
             v-for="(user, i) in users"
             :key="i"
@@ -74,17 +74,18 @@
     },
     methods: {
       scroll () {
-        window.onscroll = () => {
+        window.addEventListener('scroll', () => {
           let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
           if (bottomOfWindow) {
             this.$store.dispatch('getNextPageOfList', this.$store.getters.page);
           }
-        };
-      },
+        });
+      }
     },
     mounted () {
       this.scroll();
+      // const div = document.getElementById('scrollDiv');
+      // this.scrollDiv(div);
     }
   };
 </script>

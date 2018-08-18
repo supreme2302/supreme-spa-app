@@ -5,9 +5,9 @@ import UserPage from '../components/leftSide/UserPage.vue';
 import Login from '../components/common/Login.vue';
 import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
-import AuthGuard from './auth-guard.js';
-import AuthGuardLoad from './auth-guard-load.js';
 import MainPage from '../components/leftSide/MainPage.vue';
+import AuthGuardLoad from './auth-guard-load.js';
+import AuthGuard from './auth-guard.js';
 // import AuthGuardBeforeLogin from './auth-guard-before-login.js';
 Vue.use(Router);
 

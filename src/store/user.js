@@ -135,7 +135,6 @@ export default {
         if (!err) {
           resp.then(
             map => {
-              console.log(map);
               Object.values(map).forEach((value, i) => {
                 if (i === 0) {
                   commit('nextPage', value);
