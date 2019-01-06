@@ -1,9 +1,10 @@
+<!--suppress ALL -->
 <template>
   <v-layout>
     <v-flex xs12 sm5 md4 lg3 offset-sm1 class="mt-5 xs-size">
       <v-card class="color" flat>
         <v-card-media
-          src="http://hotwalls.ru/thumbnails/lg/goluboglazaya_blondinka_v_svitere.jpg"
+          :src="imgSrc"
           height="250px"
           class="pict-size"
         >
@@ -29,15 +30,6 @@
                 v-model="phone"
               />
               <v-text-field
-                prepend-icon="bubble_chart"
-                name="skills"
-                placeholder="Skills"
-                type="text"
-                class="pt-0"
-                :rules="skillsRules"
-                v-model="skills"
-              />
-              <v-text-field
                 prepend-icon="info"
                 multi-line
                 name="about"
@@ -47,22 +39,61 @@
                 :rules="[v => !!v || 'Description is required']"
                 v-model="about"
               />
+              <v-flex xs12>
+                <v-autocomplete
+                  prepend-icon="info"
+                  v-model="skills"
+                  :disabled="isUpdating"
+                  :items="people"
+                  chips
+                  label="Skills"
+                  item-text="name"
+                  item-value="name"
+                  multiple
+                  hide-selected
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                  >
+                    <v-chip
+                      :selected="data.selected"
+                      close
+                      class="chip--select-multi"
+                      @input="remove(data.item)"
+                    >
+                      {{ data.item.name }}
+                    </v-chip>
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                    <v-list-tile-content>
+                      <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                    </v-list-tile-content>
+                  </template>
+                </v-autocomplete>
+              </v-flex>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-btn
               dark
               class="offsets"
+              @click="triggerUpload"
             >
               Upload
               <v-icon right dark>cloud_upload</v-icon>
             </v-btn>
+            <input
+              ref="fileInput"
+              type="file"
+              style="display: none"
+              accept="image/*"
+              @change="onFileChange"
+            />
           </v-card-actions>
-          <img
-            src="http://classpic.ru/wp-content/uploads/ulybchivaya-blondinka.jpg"
-            height="100"
-            class="offset-img"
-          />
           <v-layout row class="overflow-hidden">
             <v-flex xs12>
               <v-switch
@@ -99,15 +130,8 @@
               :rules="phoneRules"
               v-model="phone"
             />
-            <v-text-field
-              prepend-icon="bubble_chart"
-              name="skills"
-              placeholder="Skills"
-              type="text"
-              class="pt-0"
-              :rules="skillsRules"
-              v-model="skills"
-            />
+
+
             <v-text-field
               prepend-icon="info"
               multi-line
@@ -116,22 +140,70 @@
               type="text"
               :rules="[v => !!v || 'Description is required!']"
               v-model="about"/>
+
+            <v-flex xs12>
+              <v-autocomplete
+                prepend-icon="info"
+                v-model="skills"
+                :disabled="isUpdating"
+                :items="people"
+                chips
+                label="Skills"
+                item-text="name"
+                item-value="name"
+                multiple
+                hide-selected
+              >
+                <template
+                  slot="selection"
+                  slot-scope="data"
+                >
+                  <v-chip
+                    :selected="data.selected"
+                    close
+                    class="chip--select-multi"
+                    @input="remove(data.item)"
+                  >
+                    {{ data.item.name }}
+                  </v-chip>
+                </template>
+                <template
+                  slot="item"
+                  slot-scope="data"
+                >
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                  </v-list-tile-content>
+                </template>
+              </v-autocomplete>
+            </v-flex>
+
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-btn
             dark
             class="offsets"
+            @click="triggerUpload"
           >
             Upload
             <v-icon right dark>cloud_upload</v-icon>
           </v-btn>
+          <input
+            id="inputId"
+            ref="fileInput"
+            type="file"
+            style="display: none"
+            accept="image/*"
+            @change="onFileChange"
+          />
         </v-card-actions>
-        <img
-          src="http://classpic.ru/wp-content/uploads/ulybchivaya-blondinka.jpg"
-          height="100"
-          class="offset-img"
-        />
+        <!--<img-->
+          <!--:src="imageSrc"-->
+          <!--v-if="imageSrc"-->
+          <!--height="100"-->
+          <!--class="offset-img"-->
+        <!--/>-->
       </v-card>
       <v-layout row>
         <v-flex xs12>
@@ -158,42 +230,94 @@
 
 <script>
   export default {
-    data () {
-      return {
+    //todo: pict blet
+    data: () => ({
         phone: '',
         about: '',
-        skills: '',
         valid: false,
         add: false,
+        image: null,
+      imgC: this.imgSrcc,
         skillsRules: [
           v => !!v || 'Skills are required'
         ],
         phoneRules: [
           v => !!v || 'Password is required',
           v => /^[0-9]+$/.test(v) || 'In field must be only numbers'
-        ]
-      };
-    },
+        ],
+      // imageSrc: 'http://localhost:5002/users/gava/',
+
+        autoUpdate: true,
+        skills: [],
+        isUpdating: false,
+        people: [
+          { name: 'Sandra Adams' },
+          { name: 'Sandra Adamss' },
+          { name: 'Sandra Adamsss' },
+        ],
+    }),
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
+
           const data = {
             skills: this.skills,
             phone: this.phone,
             about: this.about,
-            onpage: this.add
+            onpage: this.add,
+            id: this.user.id
           };
           this.$store.dispatch('changeProfile', data);
         }
+      },
+      onFileChange (event) {
+        event.preventDefault();
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = event => {
+          console.log(reader.result);
+          this.imgSrc = reader.result;
+        };
+        reader.readAsDataURL(file);
+        const input = document.getElementById('inputId');
+        this.image = input.files[0];
+        this.$store.dispatch('changeAva', this.image);
+      },
+      triggerUpload () {
+        this.$refs.fileInput.click();
+      },
+      remove (item) {
+        const index = this.skills.indexOf(item.name)
+        if (index >= 0) this.skills.splice(index, 1)
       }
     },
     computed: {
-      user () {
-        return this.$store.getters.user;
+      user: {
+        get: function () {
+          return this.$store.getters.user;
+        },
+        set: function (newV) {
+
+        }
       },
+      // user () {
+      //   return this.$store.getters.user;
+      // },
       loading () {
         return this.$store.getters.loading;
+      },
+      imgSrcc () {
+        return 'http://localhost:5002/users/gava/' + this.$store.getters.user.email;
+      },
+      imgSrc: {
+        get: function () {
+          return this.imgC;
+        },
+        set: function (newValue) {
+          this.imgC = newValue;
+        }
       }
+      // imageSrc: 'http://localhost:5002/users/gava/' + this.$store.getters.user.email,
     }
   };
 </script>

@@ -91,6 +91,7 @@
 
     <v-content>
       <router-view name="bodyWrap"/>
+
     </v-content>
     <template v-if="error">
       <v-snackbar
@@ -112,7 +113,7 @@
   export default {
     data () {
       return {
-        drawer: false
+        drawer: false,
       };
     },
     methods: {
@@ -126,8 +127,7 @@
               this.$router.push('/');
             }
           );
-      }
-
+      },
     },
     computed: {
       error () {

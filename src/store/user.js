@@ -148,16 +148,37 @@ export default {
       });
     },
 
+    changeAva ({commit}, payload) {
+      commit('clearError');
+      commit('setLoading', true);
+      // const userData = JSON.stringify(payload);
+      const formData = new FormData();
+      formData.append('image', payload);
+      User.changeAva(formData)
+        .then(
+          () => {
+            commit('setLoading', false);
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+            commit('setLoading', false);
+            commit('setError', error);
+          }
+        );
+    },
     changeProfile ({commit}, payload) {
       commit('clearError');
       commit('setLoading', true);
       const userData = JSON.stringify(payload);
+      console.log('json:  ', userData);
       User.changeProfile(userData)
         .then(
           user => {
             commit('setUser', user);
             commit('setLoading', false);
-            commit('addInList', user);
+            // commit('addInList', user);
           }
         )
         .catch(

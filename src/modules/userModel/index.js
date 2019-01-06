@@ -131,7 +131,7 @@ export default class User {
    * Loads Rating of all Users
    * @param page
    * @param {function} callbackfn
-   * @return {PromiseLike<T>|Promise<T>}
+   * @return {Promise<Response|never>}
    */
   static fetchUsers (page, callbackfn) {
     return http.get(route.userAPIMethods.usersList + '/' + page.toString(), callbackfn);
@@ -140,6 +140,23 @@ export default class User {
   static changeProfile (userData) {
     return new Promise((resolve, reject) => {
       http.post(route.userAPIMethods.updateUser, userData, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                reject(resErr.message);
+              }
+            );
+          return;
+        }
+        resolve(User.auth());
+      });
+    });
+  }
+
+  static changeAva (userData) {
+    return new Promise((resolve, reject) => {
+      http.post(route.userAPIMethods.userChava, userData, (err, resp) => {
         if (err) {
           err
             .then(

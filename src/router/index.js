@@ -5,7 +5,8 @@ import UserPage from '../components/leftSide/UserPage.vue';
 import Login from '../components/common/Login.vue';
 import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
-import MainPage from '../components/leftSide/MainPage.vue';
+import MainPage from '../components/leftSide/MainPage.vue'
+import Chat from '../components/leftSide/Chat/GenChat.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 // import AuthGuardBeforeLogin from './auth-guard-before-login.js';
@@ -32,6 +33,14 @@ export default new Router({
           components: {
             leftWrap: MainPage
           }
+        },
+        {
+          path: '/chat/:id',
+          props: true,
+          components: {
+            leftWrap: Chat
+          },
+          beforeEnter: AuthGuard
         }
       ]
     },

@@ -1,3 +1,4 @@
+<!--suppress ALL -->
 <template>
   <div>
     <v-card
@@ -25,6 +26,14 @@
             <v-divider/>
           </v-card-text>
         </v-flex>
+      </v-layout>
+      <v-layout row>
+        <v-btn
+          v-if="user"
+        :to="'/chat/' + userCard.id"
+        >
+          Write message
+        </v-btn>
       </v-layout>
     </v-card>
     <v-card
@@ -64,6 +73,9 @@
     computed: {
       userCard () {
         return this.$store.getters.userCard;
+      },
+      user () {
+        return this.$store.getters.user;
       }
     },
     beforeRouteUpdate (to, from, next) {

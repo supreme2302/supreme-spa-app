@@ -8,7 +8,6 @@ import store from './store';
 import 'vuetify/dist/vuetify.min.css';
 import User from './modules/userModel';
 import bus from './modules/bus';
-
 Vue.use(Vuetify);
 
 Vue.config.productionTip = false;
@@ -18,7 +17,9 @@ new Vue({
   el: '#app',
   store,
   router,
-  components: { App },
+  components: {
+    App,
+  },
   template: '<App/>',
   created () {
     this.$store.dispatch('renderPermission', false);

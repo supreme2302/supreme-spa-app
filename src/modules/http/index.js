@@ -8,7 +8,7 @@ class HttpService {
    * GET request
    * @param url
    * @param  {function} callbackfn
-   * @return {PromiseLike<T> | Promise<T>}
+   * @return {Promise<Response | never>}
    */
   static get (url, callbackfn) {
     return this.request('GET', url)
@@ -32,7 +32,7 @@ class HttpService {
    * @param url
    * @param body
    * @param  {function} callbackfn
-   * @return {PromiseLike<T> | Promise<T>}
+   * @return {Promise<Response | never>}
    */
   static post (url, body, callbackfn) {
     return this.request('POST', url, body)
@@ -71,8 +71,7 @@ class HttpService {
       method: requestMethod,
       headers: headers,
       body: body,
-      credentials: 'include',
-      mode: 'cors'
+      credentials: 'include'
     };
     return fetch(`${config.serverUrl}${url}`, req);
   }

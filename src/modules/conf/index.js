@@ -1,4 +1,5 @@
-const serverUrl = 'http://localhost:5000/';
+const serverUrl = 'http://localhost:5002/';
+// const serverUrl = 'https://supreme-rates-ex.ml/backend/';
 // const serverUrl = 'https://supreme-back.herokuapp.com/';
 
 /**
@@ -12,7 +13,9 @@ const userAPIMethods = {
   user: 'users/info',
   usersList: 'users/list',
   updateUser: 'users/change',
-  userCard: 'users/usercard'
+  userCard: 'users/usercard',
+  userChava: 'users/chava',
+  userGava: 'users/gava'
 };
 
 export default {serverUrl, userAPIMethods};

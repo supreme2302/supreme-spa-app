@@ -16,7 +16,7 @@
             <v-layout row>
               <v-flex xs3 md2>
                 <v-card-media
-                  src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
+                  :src="imgSrc + '/' + user.email"
                   height="45px"
                   class="round mb-1 mt-1 ml-1"
                 />
@@ -47,7 +47,7 @@
             <v-layout row>
               <v-flex xs2>
                 <v-card-media
-                  src="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
+                  :src="imgSrc + '/' + user.email"
                   height="45px"
                   class="round mb-1 mt-1 ml-3 pict-size"
                 />
@@ -66,7 +66,13 @@
 </template>
 
 <script>
+  import route from '../../modules/conf';
   export default {
+    data () {
+      return {
+        imgSrc: route.serverUrl + route.userAPIMethods.userGava
+      };
+    },
     computed: {
       users () {
         return this.$store.getters.users;
