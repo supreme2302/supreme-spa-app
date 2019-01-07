@@ -8,7 +8,7 @@
       <v-layout row>
         <v-flex xs3 class="mt-5 ml-3">
           <v-card-media
-            src="http://hotwalls.ru/thumbnails/lg/goluboglazaya_blondinka_v_svitere.jpg"
+            :src="imgSrc"
             height="200px"
           />
         </v-flex>
@@ -69,13 +69,22 @@
 </template>
 
 <script>
+  import conf from '../../modules/conf';
   export default {
+    data () {
+      return {
+
+      }
+    },
     computed: {
       userCard () {
         return this.$store.getters.userCard;
       },
       user () {
         return this.$store.getters.user;
+      },
+      imgSrc () {
+        return conf.serverUrl + conf.userAPIMethods.userGava + '/' + this.$store.getters.userCard.email;
       }
     },
     beforeRouteUpdate (to, from, next) {

@@ -229,15 +229,16 @@
 </template>
 
 <script>
+  import conf from '../../modules/conf/index.js';
   export default {
-    //todo: pict blet
-    data: () => ({
+    data () {
+      return {
         phone: '',
         about: '',
         valid: false,
         add: false,
         image: null,
-      imgC: this.imgSrcc,
+        imgSrc: conf.serverUrl + conf.userAPIMethods.userGava + '/' + this.$store.getters.user.email,
         skillsRules: [
           v => !!v || 'Skills are required'
         ],
@@ -245,7 +246,7 @@
           v => !!v || 'Password is required',
           v => /^[0-9]+$/.test(v) || 'In field must be only numbers'
         ],
-      // imageSrc: 'http://localhost:5002/users/gava/',
+        // imageSrc: 'http://localhost:5002/users/gava/',
 
         autoUpdate: true,
         skills: [],
@@ -254,12 +255,12 @@
           { name: 'Sandra Adams' },
           { name: 'Sandra Adamss' },
           { name: 'Sandra Adamsss' },
-        ],
-    }),
+        ]
+      }
+    },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
-
           const data = {
             skills: this.skills,
             phone: this.phone,
@@ -292,32 +293,12 @@
       }
     },
     computed: {
-      user: {
-        get: function () {
-          return this.$store.getters.user;
-        },
-        set: function (newV) {
-
-        }
+      user () {
+        return this.$store.getters.user;
       },
-      // user () {
-      //   return this.$store.getters.user;
-      // },
       loading () {
         return this.$store.getters.loading;
       },
-      imgSrcc () {
-        return 'http://localhost:5002/users/gava/' + this.$store.getters.user.email;
-      },
-      imgSrc: {
-        get: function () {
-          return this.imgC;
-        },
-        set: function (newValue) {
-          this.imgC = newValue;
-        }
-      }
-      // imageSrc: 'http://localhost:5002/users/gava/' + this.$store.getters.user.email,
     }
   };
 </script>

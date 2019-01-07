@@ -9,7 +9,7 @@ import MainPage from '../components/leftSide/MainPage.vue'
 import Chat from '../components/leftSide/Chat/GenChat.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
-// import AuthGuardBeforeLogin from './auth-guard-before-login.js';
+import AuthGuardFetch from './auth-guard-fetch.js';
 Vue.use(Router);
 
 export default new Router({
@@ -19,6 +19,7 @@ export default new Router({
       components: {
         bodyWrap: General
       },
+      beforeEnter: AuthGuardFetch,
       children: [
         {
           path: '/id/:id',

@@ -12,8 +12,11 @@ export default {
     setUser (state, user) {
       state.user = user;
     },
-    setList (state, list) {
+    setConcatList (state, list) {
       state.users = state.users.concat(list);
+    },
+    setList(state, list) {
+      state.users = list;
     },
     addInList (state, user) {
       state.users.push(user);
@@ -139,7 +142,7 @@ export default {
                 if (i === 0) {
                   commit('nextPage', value);
                 } else {
-                  commit('setList', value);
+                  commit('setConcatList', value);
                 }
               });
             }
