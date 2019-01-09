@@ -8,7 +8,9 @@ import store from './store';
 import 'vuetify/dist/vuetify.min.css';
 import User from './modules/userModel';
 import bus from './modules/bus';
-Vue.use(Vuetify);
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+Vue.use(Vuetify, axios, VueAxios);
 
 Vue.config.productionTip = false;
 
@@ -40,3 +42,5 @@ new Vue({
 // todo open card backend onpage
 // todo не обновляются на горячую картинки в списке
 // todo на бэке добавить обновление скила (delete insert)
+// todo если обновить страницу на чате, то юзеркард 0
+// todo не конкатить в список сообщений, а присваивать

@@ -1,5 +1,6 @@
 import User from '../modules/userModel';
 import router from '../router';
+import axios from 'axios';
 
 export default {
   state: {
@@ -54,7 +55,7 @@ export default {
     autoSignIn ({commit}, payload) {
       commit('setUser', payload);
     },
-    signIn ({commit}, payload) {
+    async signIn ({commit}, payload) {
       commit('renderPermission', false);
       commit('clearError');
       commit('setLoading', true);

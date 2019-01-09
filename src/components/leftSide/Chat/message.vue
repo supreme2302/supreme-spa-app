@@ -32,10 +32,22 @@ export default {
   },
   computed: {
     session () {
-      return this.$store.getters.session;
+      const list = this.$store.getters.sessions;
+      console.log('list  ', list);
+      for (let i = 0; i < list.length; ++i) {
+        if (list[i].id === document.location.pathname.split('/')[2]) {
+          return list[i];
+        }
+      }
     },
     user () {
       return this.$store.getters.user;
+    }
+  },
+  methods: {
+    printDeb () {
+      console.log(this.session);
+      console.log(this.$store.getters.session);
     }
   },
   // vuex: {

@@ -1,5 +1,4 @@
 
-
 const now = new Date();
 export default {
   state: {
@@ -11,20 +10,20 @@ export default {
     // 会话列表
     sessions: [
       {
-        id: 1,
+        id: '',
         user: {
           name: 'sosed',
           img: 'dist/images/2.png'
         },
         messages: [
-          {
-            content: 'Hello，iam id1',
-            date: now
-          }, {
-            content: 'onemore id1',
-            date: now,
-            self: true
-          }
+          // {
+          //   content: 'Hello，iam id1',
+          //   date: now
+          // }, {
+          //   content: 'onemore id1',
+          //   date: now,
+          //   self: true
+          // }
         ]
       }
     ],
@@ -44,7 +43,6 @@ export default {
     SEND_MESSAGE (state, content) {
       state.sessions[0].messages.push({
         content: content,
-        date: new Date(),
         self: true
       });
     },
@@ -56,11 +54,44 @@ export default {
     SET_FILTER_KEY (state, value) {
       state.filterKey = value;
     },
-    GET_MESSAGE (state, content) {
-      state.sessions[0].messages.push({
-        content: content,
-        date: new Date()
-      });
+    GET_MESSAGE (state, {messages, sessionId, curUserEmail}) {
+      let contains = false;
+      let index = -1;
+      for (let i = 0; i < state.sessions.length; ++i) {
+        console.log('cycle  ', state.sessions[i].id);
+        if (state.sessions[i].id === sessionId) {
+          contains = true;
+          index = i;
+        }
+      }
+      console.log('cont   ', contains);
+      if (!contains) {
+        state.sessions.push({
+          id: sessionId,
+          user: {
+            name: 'sosed',
+            img: 'dist/images/2.png'
+          },
+          messages: []
+        });
+        for (let i = 0; i < state.sessions.length; ++i) {
+          if (state.sessions[i].id === sessionId) {
+            for (let j = 0; j < messages.length; ++j) {
+              if (messages[j].sender === curUserEmail) {
+                messages[j].self = true;
+              }
+              state.sessions[i].messages.push(messages[j]);
+            }
+          }
+        }
+      } else {
+        for (let i = 0; i < messages.length; ++i) {
+          if (messages[i].sender === curUserEmail) {
+            messages[i].self = true;
+            state.sessions[index].messages.push(messages[i]);
+          }
+        }
+      }
     }
   },
   actions: {
@@ -76,7 +107,7 @@ export default {
     search: ({ dispatch }, value) => dispatch('SET_FILTER_KEY', value)
   },
   getters: {
-    session: state => state.sessions[0],
+    sessions: (state) => state.sessions
     // user: state => state.user
   }
 };

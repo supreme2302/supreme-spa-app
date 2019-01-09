@@ -39,16 +39,15 @@
         }
       },
       connect () {
-        console.log('conneeeeeeeeect');
         var pathname = document.location.pathname;
-
-        ws = new WebSocket('ws://localhost:5002/chat');
+        ws = new WebSocket('ws://localhost:5002' + pathname);
+        let sessionId = pathname.split('/')[2];
         ws.onmessage = function (event) {
           // var log = document.getElementById('log');
           console.log(event.data);
-          var message = JSON.parse(event.data);
-          console.log('onmessage and content is:  ', message.content);
-          // this.$store.dispatch('getMessage', message.content);
+          var messages = JSON.parse(event.data);
+          const curUserEmail = this.$store.getters.user.email;
+          this.$store.dispatch('getMessage', {messages, sessionId, curUserEmail});
         }.bind(this);
       },
       sendd () {
@@ -58,7 +57,7 @@
           var json = JSON.stringify({
             'content': content,
             // 'from': from
-            'to': to
+            'recipient': to
           });
 
           ws.send(json);
