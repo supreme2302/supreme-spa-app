@@ -7,6 +7,7 @@ import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
 import MainPage from '../components/leftSide/MainPage.vue'
 import Chat from '../components/leftSide/Chat/GenChat.vue';
+import Test from '../components/second_var/test.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
@@ -44,6 +45,12 @@ export default new Router({
           beforeEnter: AuthGuard
         }
       ]
+    },
+    {
+      path: '/test',
+      components: {
+        bodyWrap: Test
+      }
     },
     {
       path: '/auth',
