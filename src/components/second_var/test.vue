@@ -1,7 +1,8 @@
-<!--suppress HtmlUnknownTag -->
+<!--suppress ALL -->
+
 <template>
   <v-layout row>
-    <v-flex md2 fixed-2>
+    <v-flex sm2 fixed-2 class="my-hidden">
       <v-card>
         <v-card-title primary-title class="pb-0">
           <span> Hello </span>
@@ -24,21 +25,23 @@
 
     </v-flex>
 
-    <v-flex xs12 md4 offset-xs2>
+    <v-flex xs12 md4 offset-md2 class="my-hidden">
       <v-card
-        v-for="i in 5"
+        hover
+        v-for="(user, i) in users"
+        :key="i"
+        :to="'/test/idd/' + user.id"
       >
         <v-layout>
-          <v-flex sm3>
+          <v-flex xs4 sm3>
             <v-card-title>
               <v-img
                 class="white--text"
                 height="120px"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-              />
+                :src="imgSrc + '/' + user.email"/>
             </v-card-title>
           </v-flex>
-          <v-flex sm9>
+          <v-flex xs8 sm9>
             <v-card-title>
               <div>
                 <span class="grey--text">Number 10</span><br>
@@ -46,120 +49,48 @@
                 <span>Whitsunday Island, Whitsunday Islands</span>
               </div>
             </v-card-title>
-            <v-card-actions>
-              <v-btn flat color="orange">Share</v-btn>
-              <v-btn flat color="orange">Explore</v-btn>
-            </v-card-actions>
+            <!--<v-card-actions>-->
+              <!--<v-btn flat color="orange">Share</v-btn>-->
+              <!--<v-btn flat color="orange">Explore</v-btn>-->
+            <!--</v-card-actions>-->
           </v-flex>
         </v-layout>
       </v-card>
     </v-flex>
 
-    <v-flex fixed xs12 md6 class="hidden-sm-and-down">
-      <v-card>
-        <v-img
-          src="https://cdn.vuetifyjs.com/images/lists/ali.png"
-          height="300px"
-        >
-          <v-layout
-            column
-            fill-height
-          >
-            <v-card-title>
-              <v-btn dark icon>
-                <v-icon>chevron_left</v-icon>
-              </v-btn>
-
-              <v-spacer></v-spacer>
-
-              <v-btn dark icon class="mr-3">
-                <v-icon>edit</v-icon>
-              </v-btn>
-
-              <v-btn dark icon>
-                <v-icon>more_vert</v-icon>
-              </v-btn>
-            </v-card-title>
-
-            <v-spacer></v-spacer>
-
-            <v-card-title class="white--text pl-5 pt-5">
-              <div class="display-1 pl-5 pt-5">Ali Conners</div>
-            </v-card-title>
-          </v-layout>
-        </v-img>
-
-        <v-list two-line>
-          <v-list-tile @click="">
-            <v-list-tile-action>
-              <v-icon color="indigo">phone</v-icon>
-            </v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>(650) 555-1234</v-list-tile-title>
-              <v-list-tile-sub-title>Mobile</v-list-tile-sub-title>
-            </v-list-tile-content>
-
-            <v-list-tile-action>
-              <v-icon>chat</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-
-          <v-list-tile @click="">
-            <v-list-tile-action></v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>(323) 555-6789</v-list-tile-title>
-              <v-list-tile-sub-title>Work</v-list-tile-sub-title>
-            </v-list-tile-content>
-
-            <v-list-tile-action>
-              <v-icon>chat</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-
-          <v-divider inset></v-divider>
-
-          <v-list-tile @click="">
-            <v-list-tile-action>
-              <v-icon color="indigo">mail</v-icon>
-            </v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>aliconnors@example.com</v-list-tile-title>
-              <v-list-tile-sub-title>Personal</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-list-tile @click="">
-            <v-list-tile-action></v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>ali_connors@example.com</v-list-tile-title>
-              <v-list-tile-sub-title>Work</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <v-divider inset></v-divider>
-
-          <v-list-tile @click="">
-            <v-list-tile-action>
-              <v-icon color="indigo">location_on</v-icon>
-            </v-list-tile-action>
-
-            <v-list-tile-content>
-              <v-list-tile-title>1400 Main Street</v-list-tile-title>
-              <v-list-tile-sub-title>Orlando, FL 79938</v-list-tile-sub-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-card>
+    <v-flex fixed xs12>
+      <router-view name="testWrap"/>
     </v-flex>
+
   </v-layout>
 </template>
 
 <script>
+  import route from '../../modules/conf';
+  import resizeCallback from '../../modules/util/resizeCallback.js';
+  import computeSize from '../../modules/util/computeSize.js';
   export default {
+    data () {
+      return {
+        imgSrc: route.serverUrl + route.userAPIMethods.userGava,
+        selected: []
+      }
+    },
+    computed: {
+      users () {
+        return this.$store.getters.users;
+      }
+    },
+    beforeRouteUpdate (to, from, next) {
+      if (to.path === '/test') {
+        window.removeEventListener('resize', resizeCallback);
+        const elements = document.getElementsByClassName('my-hidden');
+        for (let i = 0; i < elements.length; ++i) {
+          elements[i].style.display = '';
+        }
+      }
+      next();
+    },
   };
 </script>
 
@@ -173,5 +104,20 @@
     position: fixed;
     left: 0;
     width: 16%;
+  }
+  @media(max-width: 960px) {
+    .fixed {
+      /*position: relative;*/
+      /*right: 0;*/
+      width: 100%;
+    }
+    .fixed-2 {
+      position: relative;
+    }
+  }
+  @media (max-width: 826px) {
+    .fixed-2 {
+      width: 130px;
+    }
   }
 </style>

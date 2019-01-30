@@ -8,6 +8,7 @@ import Profile from '../components/common/Profile.vue';
 import MainPage from '../components/leftSide/MainPage.vue'
 import Chat from '../components/leftSide/Chat/GenChat.vue';
 import Test from '../components/second_var/test.vue';
+import TestCard from '../components/second_var/test_card.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
@@ -50,7 +51,17 @@ export default new Router({
       path: '/test',
       components: {
         bodyWrap: Test
-      }
+      },
+      children: [
+        {
+          path: '/test/idd/:id',
+          props: true,
+          components: {
+            testWrap: TestCard
+          },
+          beforeEnter: AuthGuardLoad
+        }
+      ]
     },
     {
       path: '/auth',
