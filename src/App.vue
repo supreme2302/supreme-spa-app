@@ -1,3 +1,5 @@
+<!--suppress ALL -->
+
 <template>
   <v-app>
     <!--Navigation drawer-->

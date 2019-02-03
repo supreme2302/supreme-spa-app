@@ -1,6 +1,5 @@
 import User from '../modules/userModel';
 import router from '../router';
-import axios from 'axios';
 
 export default {
   state: {
@@ -192,6 +191,27 @@ export default {
             commit('setError', error);
           }
         );
+    },
+    sendSkillFilter ({commit}, {page, params}) {
+      commit('clearError');
+      commit('setLoading', true);
+      User.sendSkillFilter(1, params, (err, resp) => {
+        if (!err) {
+          console.log('filter');
+          resp.then(
+            map => {
+              Object.values(map).forEach((value, i) => {
+                console.log('filter  ', i);
+                if (i === 0) {
+                  commit('nextPage', value);
+                } else {
+                  commit('setList', value);
+                }
+              });
+            }
+          );
+        }
+      });
     }
   },
   getters: {

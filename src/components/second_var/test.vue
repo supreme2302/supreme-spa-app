@@ -2,15 +2,16 @@
 
 <template>
   <v-layout row>
-    <v-flex sm2 fixed-2 class="my-hidden">
+    <v-flex sm2 fixed-2 class="my-hidden" id="checkbox">
       <v-card>
         <v-card-title primary-title class="pb-0">
-          <span> Hello </span>
+          <span> Skills </span>
         </v-card-title>
         <v-divider/>
         <v-card-text class="pt-0">
-          <v-checkbox v-model="selected" label="John" value="John"></v-checkbox>
-          <v-checkbox v-model="selected" label="Jacob" value="Jacob"></v-checkbox>
+          <v-checkbox v-model="selected" @change="sendSkill" label="Guitar" value="Guitar"></v-checkbox>
+          <v-checkbox v-model="selected" @change="sendSkill" label="Drums" value="Drums"></v-checkbox>
+          <v-checkbox v-model="selected" @change="sendSkill" label="Piano" value="Piano"></v-checkbox>
         </v-card-text>
         <br>
         <v-card-title primary-title class="pb-0">
@@ -22,7 +23,6 @@
           <v-checkbox v-model="selected" label="Jacob" value="Jacob"></v-checkbox>
         </v-card-text>
       </v-card>
-
     </v-flex>
 
     <v-flex xs12 md4 offset-md2 class="my-hidden">
@@ -73,12 +73,33 @@
     data () {
       return {
         imgSrc: route.serverUrl + route.userAPIMethods.userGava,
-        selected: []
+        selected: ['']
       }
     },
     computed: {
       users () {
         return this.$store.getters.users;
+      }
+    },
+    methods: {
+      scroll () {
+        window.addEventListener('scroll', () => {
+          let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+          if (bottomOfWindow) {
+            this.$store.dispatch('getNextPageOfList', this.$store.getters.page);
+          }
+        });
+      },
+      sendSkill () {
+        console.log('skilss:  ', this.selected);
+        let params = '?';
+        for (let i = 0; i < this.selected.length; ++i) {
+          if (this.selected[i] === '') continue;
+          const and = (i === 0) ? '' : '&';
+          params += and + 'skill=' + this.selected[i];
+        }
+        const page = this.$store.getters.page;
+        this.$store.dispatch('sendSkillFilter', {page, params});
       }
     },
     beforeRouteUpdate (to, from, next) {
@@ -88,9 +109,24 @@
         for (let i = 0; i < elements.length; ++i) {
           elements[i].style.display = '';
         }
+        if (window.innerWidth <= 400) {
+          const checkbox = document.getElementById('checkbox');
+          checkbox.style.display = 'none';
+        }
       }
       next();
     },
+    mounted () {
+      this.scroll();
+      const checkbox = document.getElementById('checkbox');
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 400) {
+          checkbox.style.display = 'none';
+        } else {
+          checkbox.style.display = '';
+        }
+      });
+    }
   };
 </script>
 

@@ -15,7 +15,8 @@ const userAPIMethods = {
   updateUser: 'users/change',
   userCard: 'users/usercard',
   userChava: 'users/chava',
-  userGava: 'users/gava'
+  userGava: 'users/gava',
+  skillFilter: 'users/listt'
 };
 
 export default {serverUrl, userAPIMethods};

@@ -174,4 +174,8 @@ export default class User {
   static getCard (id, callbackfn) {
     return http.get(route.userAPIMethods.userCard + '/' + id.toString(), callbackfn);
   }
+
+  static sendSkillFilter (page, params, callbaclfn) {
+    return http.get(route.userAPIMethods.skillFilter + '/' + page.toString() + params, callbaclfn);
+  }
 }
