@@ -39,6 +39,7 @@ new Vue({
     this.$store.dispatch('fetchUsers');
   }
 });
+// todo добавить пагинацию с фильтрами
 // todo open card backend onpage
 // todo не обновляются на горячую картинки в списке
 // todo на бэке добавить обновление скила (delete insert)
