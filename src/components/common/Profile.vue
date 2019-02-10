@@ -44,7 +44,7 @@
                   prepend-icon="info"
                   v-model="skills"
                   :disabled="isUpdating"
-                  :items="people"
+                  :items="skillTips"
                   chips
                   label="Skills"
                   item-text="name"
@@ -57,7 +57,7 @@
                     slot-scope="data"
                   >
                     <v-chip
-                      :selected="data.selected"
+                      :selected="data.selectedSkills"
                       close
                       class="chip--select-multi"
                       @input="remove(data.item)"
@@ -146,7 +146,7 @@
                 prepend-icon="info"
                 v-model="skills"
                 :disabled="isUpdating"
-                :items="people"
+                :items="skillTips"
                 chips
                 label="Skills"
                 item-text="name"
@@ -159,7 +159,44 @@
                   slot-scope="data"
                 >
                   <v-chip
-                    :selected="data.selected"
+                    :selected="data.selectedSkills"
+                    close
+                    class="chip--select-multi"
+                    @input="remove(data.item)"
+                  >
+                    {{ data.item.name }}
+                  </v-chip>
+                </template>
+                <template
+                  slot="item"
+                  slot-scope="data"
+                >
+                  <v-list-tile-content>
+                    <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                  </v-list-tile-content>
+                </template>
+              </v-autocomplete>
+            </v-flex>
+
+            <v-flex xs12>
+              <v-autocomplete
+                prepend-icon="info"
+                v-model="genres"
+                :disabled="isUpdating"
+                :items="genreTips"
+                chips
+                label="Genres"
+                item-text="name"
+                item-value="name"
+                multiple
+                hide-selected
+              >
+                <template
+                  slot="selection"
+                  slot-scope="data"
+                >
+                  <v-chip
+                    :selected="data.selectedGenres"
                     close
                     class="chip--select-multi"
                     @input="remove(data.item)"
@@ -250,18 +287,15 @@
 
         autoUpdate: true,
         skills: [],
-        isUpdating: false,
-        people: [
-          { name: 'Sandra Adams' },
-          { name: 'Sandra Adamss' },
-          { name: 'Sandra Adamsss' },
-        ]
+        genres: [],
+        isUpdating: false
       }
     },
     methods: {
       onSubmit () {
         if (this.$refs.form.validate()) {
           const data = {
+            genres: this.genres,
             skills: this.skills,
             phone: this.phone,
             about: this.about,
@@ -299,6 +333,12 @@
       loading () {
         return this.$store.getters.loading;
       },
+      skillTips () {
+        return this.$store.getters.skills.map(skill => ({name: skill}));
+      },
+      genreTips () {
+        return this.$store.getters.genres.map(genre => ({name: genre}));
+      }
     }
   };
 </script>

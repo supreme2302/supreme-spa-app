@@ -12,6 +12,8 @@ import TestCard from '../components/second_var/test_card.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
+import AuthGuardSkills from './auth-guard-skills.js';
+import AuthGuardList from './auth-guard-list.js';
 Vue.use(Router);
 
 export default new Router({
@@ -52,6 +54,7 @@ export default new Router({
       components: {
         bodyWrap: Test
       },
+      beforeEnter: AuthGuardList,
       children: [
         {
           path: '/test/idd/:id',

@@ -16,7 +16,9 @@ const userAPIMethods = {
   userCard: 'users/usercard',
   userChava: 'users/chava',
   userGava: 'users/gava',
-  skillFilter: 'users/listt'
+  // skillFilter: 'users/listt',
+  skills: 'users/skills',
+  genres: 'users/genres'
 };
 
 export default {serverUrl, userAPIMethods};

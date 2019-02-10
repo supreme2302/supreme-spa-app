@@ -176,6 +176,14 @@ export default class User {
   }
 
   static sendSkillFilter (page, params, callbaclfn) {
-    return http.get(route.userAPIMethods.skillFilter + '/' + page.toString() + params, callbaclfn);
+    return http.get(route.userAPIMethods.usersList + '/' + page.toString() + params, callbaclfn);
+  }
+
+  static getAllSkills (callbackfn) {
+    return http.get(route.userAPIMethods.skills, callbackfn);
+  }
+
+  static getAllGenres (callbackfn) {
+    return http.get(route.userAPIMethods.genres, callbackfn);
   }
 }

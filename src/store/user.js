@@ -133,24 +133,6 @@ export default {
         }
       });
     },
-    getNextPageOfList ({commit}, page) {
-      User.fetchUsers(page, (err, resp) => {
-        if (!err) {
-          resp.then(
-            map => {
-              Object.values(map).forEach((value, i) => {
-                if (i === 0) {
-                  commit('nextPage', value);
-                } else {
-                  commit('setConcatList', value);
-                }
-              });
-            }
-          );
-        }
-      });
-    },
-
     changeAva ({commit}, payload) {
       commit('clearError');
       commit('setLoading', true);
@@ -191,6 +173,23 @@ export default {
             commit('setError', error);
           }
         );
+    },
+    getNextPageOfList ({commit}, page) {
+      User.fetchUsers(page, (err, resp) => {
+        if (!err) {
+          resp.then(
+            map => {
+              Object.values(map).forEach((value, i) => {
+                if (i === 0) {
+                  commit('nextPage', value);
+                } else {
+                  commit('setConcatList', value);
+                }
+              });
+            }
+          );
+        }
+      });
     },
     sendSkillFilter ({commit}, {page, params}) {
       commit('clearError');

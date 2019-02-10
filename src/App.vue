@@ -61,7 +61,7 @@
         class="hidden-md-and-up"
       />
       <v-toolbar-title>
-        <router-link to="/" tag="span" class="pointer"> Supreme </router-link>
+        <router-link to="/test" tag="span" class="pointer"> Supreme </router-link>
       </v-toolbar-title>
       <v-spacer/>
       <transition

@@ -2,30 +2,40 @@
 
 <template>
   <v-layout row>
-    <v-flex sm2 fixed-2 class="my-hidden" id="checkbox">
+    <v-flex xs2 fixed-2 class="my-hidden" id="checkbox">
       <v-card>
         <v-card-title primary-title class="pb-0">
           <span> Skills </span>
         </v-card-title>
         <v-divider/>
         <v-card-text class="pt-0">
-          <v-checkbox v-model="selected" @change="sendSkill" label="Guitar" value="Guitar"></v-checkbox>
-          <v-checkbox v-model="selected" @change="sendSkill" label="Drums" value="Drums"></v-checkbox>
-          <v-checkbox v-model="selected" @change="sendSkill" label="Piano" value="Piano"></v-checkbox>
+          <v-checkbox
+            hide-details
+            v-for="(skill, i) in skills"
+            :key="i"
+            v-model="selectedSkills"
+            @change="sendSkill"
+            :label="skill.toString()"
+            :value="skill"></v-checkbox>
         </v-card-text>
-        <br>
         <v-card-title primary-title class="pb-0">
-          <span> Hello </span>
+          <span> Genres </span>
         </v-card-title>
         <v-divider/>
         <v-card-text class="pt-0">
-          <v-checkbox v-model="selected" label="John" value="John"></v-checkbox>
-          <v-checkbox v-model="selected" label="Jacob" value="Jacob"></v-checkbox>
+          <v-checkbox
+            hide-details
+            v-for="(genre, i) in genres"
+            :key="i"
+            @change="sendSkill"
+            v-model="selectedGenres"
+            :label="genre.toString()"
+            :value="genre"></v-checkbox>
         </v-card-text>
       </v-card>
     </v-flex>
 
-    <v-flex xs12 md4 offset-md2 class="my-hidden">
+    <v-flex xs10 md4 offset-sm2 my-list class="my-hidden">
       <v-card
         hover
         v-for="(user, i) in users"
@@ -73,12 +83,21 @@
     data () {
       return {
         imgSrc: route.serverUrl + route.userAPIMethods.userGava,
-        selected: ['']
+        selectedSkills: [''],
+        selectedGenres: [''],
       }
     },
     computed: {
       users () {
         return this.$store.getters.users;
+      },
+
+      skills () {
+        return this.$store.getters.skills;
+      },
+
+      genres () {
+        return this.$store.getters.genres;
       }
     },
     methods: {
@@ -91,16 +110,24 @@
         });
       },
       sendSkill () {
-        console.log('skilss:  ', this.selected);
+        console.log('skilss:  ', this.selectedSkills);
         let params = '?';
-        for (let i = 0; i < this.selected.length; ++i) {
-          if (this.selected[i] === '') continue;
+        let existSkills = false;
+        for (let i = 0; i < this.selectedSkills.length; ++i) {
+          if (this.selectedSkills[i] === '') continue;
           const and = (i === 0) ? '' : '&';
-          params += and + 'skill=' + this.selected[i];
+          params += and + 'skill=' + this.selectedSkills[i];
+        }
+        params += existSkills ? '&' : '';
+        for (let i = 0; i < this.selectedGenres.length; ++i) {
+          if (this.selectedGenres[i] === '') continue;
+          const and = (i === 0) ? '' : '&';
+          params += and + 'genre=' + this.selectedGenres[i];
         }
         const page = this.$store.getters.page;
         this.$store.dispatch('sendSkillFilter', {page, params});
-      }
+      },
+
     },
     beforeRouteUpdate (to, from, next) {
       if (to.path === '/test') {
@@ -118,6 +145,7 @@
     },
     mounted () {
       this.scroll();
+      // this.deleteDivByClassName('v-messages');
       const checkbox = document.getElementById('checkbox');
       window.addEventListener('resize', () => {
         if (window.innerWidth <= 400) {
@@ -148,12 +176,24 @@
       width: 100%;
     }
     .fixed-2 {
-      position: relative;
+      /*position: relative;*/
     }
   }
   @media (max-width: 826px) {
     .fixed-2 {
-      width: 130px;
+      max-width: 130px!important;
+      width: 130px!important;
+    }
+    .my-list {
+      margin-left: 130px;
+    }
+  }
+  @media (max-width: 400px) {
+    .my-list {
+      margin-left: 0!important;
+      width: 100% !important;
+      max-width: 100%!important;
+      flex-grow: 1!important;
     }
   }
 </style>
