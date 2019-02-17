@@ -86,6 +86,19 @@
         </v-list-tile-action>
 
         <v-list-tile-content>
+          <v-list-tile-title>{{userCard.genres}}</v-list-tile-title>
+          <v-list-tile-sub-title>Genres</v-list-tile-sub-title>
+        </v-list-tile-content>
+      </v-list-tile>
+
+      <v-divider inset></v-divider>
+
+      <v-list-tile @click="">
+        <v-list-tile-action>
+          <v-icon color="indigo">location_on</v-icon>
+        </v-list-tile-action>
+
+        <v-list-tile-content>
           <v-list-tile-title>{{userCard.about}}</v-list-tile-title>
           <v-list-tile-sub-title>About</v-list-tile-sub-title>
         </v-list-tile-content>

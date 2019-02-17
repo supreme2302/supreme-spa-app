@@ -6,7 +6,8 @@ export default {
     users: [],
     user: null,
     userCard: null,
-    page: 1
+    page: 1,
+    img: null
   },
   mutations: {
     setUser (state, user) {
@@ -26,9 +27,35 @@ export default {
     },
     nextPage (state, page) {
       state.page = page;
+    },
+    setImg (state, img) {
+      console.log('setImg   ', img);
+      state.img = img;
     }
   },
   actions: {
+    loadImg ({commit}, payload) {
+      User.loadImg(payload, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                commit('setError', resErr.message);
+              }
+            );
+        } else {
+          resp.then(
+            img => {
+              commit('setImg', img);
+            }
+          );
+        }
+      });
+    },
+
+    setImg ({commit}, payload) {
+      commit('setImg', payload);
+    },
     openCard ({commit}, payload) {
       const id = payload.id;
       commit('clearError');
@@ -115,24 +142,6 @@ export default {
           }
         );
     },
-    fetchUsers ({commit}) {
-      User.fetchUsers(1, (err, resp) => {
-        if (!err) {
-          resp.then(
-            map => {
-              console.log(map);
-              Object.values(map).forEach((value, i) => {
-                if (i === 0) {
-                  commit('nextPage', value);
-                } else {
-                  commit('setList', value);
-                }
-              });
-            }
-          );
-        }
-      });
-    },
     changeAva ({commit}, payload) {
       commit('clearError');
       commit('setLoading', true);
@@ -174,8 +183,28 @@ export default {
           }
         );
     },
-    getNextPageOfList ({commit}, page) {
-      User.fetchUsers(page, (err, resp) => {
+    fetchUsers ({commit}) {
+      User.fetchUsers(1, (err, resp) => {
+        if (!err) {
+          resp.then(
+            map => {
+              console.log(map);
+              Object.values(map).forEach((value, i) => {
+                if (i === 0) {
+                  commit('nextPage', value);
+                } else {
+                  commit('setList', value);
+                }
+              });
+            }
+          );
+        }
+      });
+    },
+    getNextPageOfList ({commit}, {page, params}) {
+      commit('clearError');
+      commit('setLoading', true);
+      User.sendSkillFilter(page, params, (err, resp) => {
         if (!err) {
           resp.then(
             map => {
@@ -185,6 +214,7 @@ export default {
                 } else {
                   commit('setConcatList', value);
                 }
+                commit('setLoading', false);
               });
             }
           );
@@ -206,6 +236,7 @@ export default {
                 } else {
                   commit('setList', value);
                 }
+                commit('setLoading', false);
               });
             }
           );
@@ -218,6 +249,7 @@ export default {
     user: state => state.user,
     isUserLoggedIn: state => state.user !== null,
     userCard: state => state.userCard,
-    page: state => state.page
+    page: state => state.page,
+    img: state => state.img
   }
 };

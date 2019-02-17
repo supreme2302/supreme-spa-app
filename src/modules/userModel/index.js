@@ -16,6 +16,7 @@ export default class User {
     this.id = data.id;
     this.about = data.about;
     this.skills = data.skills;
+    this.genres = data.genres;
   }
 
   /**
@@ -185,5 +186,9 @@ export default class User {
 
   static getAllGenres (callbackfn) {
     return http.get(route.userAPIMethods.genres, callbackfn);
+  }
+
+  static loadImg (email, callbackfn) {
+    return http.get(route.userAPIMethods.userGava + '/' + email, callbackfn);
   }
 }

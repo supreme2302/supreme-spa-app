@@ -48,7 +48,7 @@
               <v-img
                 class="white--text"
                 height="120px"
-                :src="imgSrc + '/' + user.email"/>
+                :src="imgSrc + '/' + user.email"></v-img>
             </v-card-title>
           </v-flex>
           <v-flex xs8 sm9>
@@ -98,14 +98,28 @@
 
       genres () {
         return this.$store.getters.genres;
-      }
+      },
     },
     methods: {
       scroll () {
         window.addEventListener('scroll', () => {
           let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
           if (bottomOfWindow) {
-            this.$store.dispatch('getNextPageOfList', this.$store.getters.page);
+            let params = '?';
+            let existSkills = false;
+            for (let i = 0; i < this.selectedSkills.length; ++i) {
+              if (this.selectedSkills[i] === '') continue;
+              const and = (i === 0) ? '' : '&';
+              params += and + 'skill=' + this.selectedSkills[i];
+            }
+            params += existSkills ? '&' : '';
+            for (let i = 0; i < this.selectedGenres.length; ++i) {
+              if (this.selectedGenres[i] === '') continue;
+              const and = (i === 0) ? '' : '&';
+              params += and + 'genre=' + this.selectedGenres[i];
+            }
+            const page = this.$store.getters.page;
+            this.$store.dispatch('getNextPageOfList', {page, params});
           }
         });
       },
@@ -144,6 +158,7 @@
       next();
     },
     mounted () {
+      console.log('test-list mounted');
       this.scroll();
       // this.deleteDivByClassName('v-messages');
       const checkbox = document.getElementById('checkbox');

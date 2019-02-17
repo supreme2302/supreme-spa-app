@@ -39,9 +39,9 @@ new Vue({
     this.$store.dispatch('fetchUsers');
   }
 });
-// todo добавить пагинацию с фильтрами
-// todo open card backend onpage
+// todo доделывать FullUserPage
 // todo не обновляются на горячую картинки в списке
+// todo open card backend onpage
 // todo на бэке добавить обновление скила (delete insert)
 // todo если обновить страницу на чате, то юзеркард 0
 // todo не конкатить в список сообщений, а присваивать

@@ -130,8 +130,6 @@
               :rules="phoneRules"
               v-model="phone"
             />
-
-
             <v-text-field
               prepend-icon="info"
               multi-line
