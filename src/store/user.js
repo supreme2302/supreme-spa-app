@@ -1,5 +1,6 @@
 import User from '../modules/userModel';
 import router from '../router';
+import http from '../modules/http';
 
 export default {
   state: {
@@ -7,7 +8,8 @@ export default {
     user: null,
     userCard: null,
     page: 1,
-    img: null
+    img: null,
+    comments: []
   },
   mutations: {
     setUser (state, user) {
@@ -16,7 +18,7 @@ export default {
     setConcatList (state, list) {
       state.users = state.users.concat(list);
     },
-    setList(state, list) {
+    setList (state, list) {
       state.users = list;
     },
     addInList (state, user) {
@@ -31,6 +33,12 @@ export default {
     setImg (state, img) {
       console.log('setImg   ', img);
       state.img = img;
+    },
+    setComment (state, comments) {
+      state.comments = comments;
+    },
+    addComment (state, comment) {
+      state.comments.push(comment);
     }
   },
   actions: {
@@ -142,16 +150,19 @@ export default {
           }
         );
     },
-    changeAva ({commit}, payload) {
+    changeAva ({commit}, {img, id}) {
       commit('clearError');
       commit('setLoading', true);
       // const userData = JSON.stringify(payload);
       const formData = new FormData();
-      formData.append('image', payload);
+      formData.append('image', img);
+      formData.append('id', id);
       User.changeAva(formData)
         .then(
-          () => {
+          user => {
+            console.log('changeee ava  ', user);
             commit('setLoading', false);
+            commit('setUser', user);
           }
         )
         .catch(
@@ -242,7 +253,68 @@ export default {
           );
         }
       });
-    }
+    },
+
+    getCommentsOfUser ({commit}, {id, next}) {
+      commit('clearError');
+      commit('setLoading', true);
+      const userData = JSON.stringify(id);
+      User.getCommentsAboutUser(userData, (err, resp) => {
+        if (!err) {
+          resp.then(
+            comments => {
+              commit('setComment', comments);
+              commit('setLoading', false);
+              next();
+            }
+          );
+        } else {
+          console.log('getCommentsOfUserERROR __ ', err);
+          commit('setLoading', false);
+          next();
+        }
+      });
+    },
+
+    sendComment ({commit}, payload) {
+      commit('clearError');
+      commit('setLoading', true);
+      const userData = JSON.stringify(payload);
+      User.sendComment(userData)
+        .then(
+          () => {
+            commit('addComment', payload);
+            commit('renderPermission', true);
+            commit('setLoading', false);
+          }
+        )
+        .catch(
+          error => {
+            console.log(error);
+            commit('setLoading', false);
+            commit('setError', error);
+          }
+        );
+    },
+    signUpTest({ commit }, payload) {
+      console.log("signup action");
+      const userData = JSON.stringify(payload);
+      http.post('http://178.128.138.0:8090/admin/register', userData, (err, resp) => {
+        console.log("register done");
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(resp);
+          http.get('http://178.128.138.0:8090/admin/info', (er, res) => {
+            console.log("info done");
+            if (er) {
+              console.log(er);
+            }
+            console.log(res);
+          });
+        }
+      });
+    },
   },
   getters: {
     users: state => state.users,
@@ -250,6 +322,7 @@ export default {
     isUserLoggedIn: state => state.user !== null,
     userCard: state => state.userCard,
     page: state => state.page,
-    img: state => state.img
+    img: state => state.img,
+    comments: state => state.comments
   }
 };

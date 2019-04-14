@@ -48,7 +48,7 @@
               <v-img
                 class="white--text"
                 height="120px"
-                :src="imgSrc + '/' + user.email"></v-img>
+                :src="imgSrc + '/' + user.image"></v-img>
             </v-card-title>
           </v-flex>
           <v-flex xs8 sm9>
@@ -82,7 +82,7 @@
   export default {
     data () {
       return {
-        imgSrc: route.serverUrl + route.userAPIMethods.userGava,
+        imgSrc: route.serverUrl + route.userAPIMethods.mediaGava,
         selectedSkills: [''],
         selectedGenres: [''],
       }
@@ -158,6 +158,7 @@
       next();
     },
     mounted () {
+      this.$store.dispatch('fetchUsers');
       console.log('test-list mounted');
       this.scroll();
       // this.deleteDivByClassName('v-messages');

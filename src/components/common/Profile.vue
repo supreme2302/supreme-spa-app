@@ -273,7 +273,7 @@
         valid: false,
         add: false,
         image: null,
-        imgSrc: conf.serverUrl + conf.userAPIMethods.userGava + '/' + this.$store.getters.user.email,
+        imgSrc: conf.serverUrl + conf.userAPIMethods.mediaGava + '/' + this.$store.getters.user.image,
         skillsRules: [
           v => !!v || 'Skills are required'
         ],
@@ -314,7 +314,9 @@
         reader.readAsDataURL(file);
         const input = document.getElementById('inputId');
         this.image = input.files[0];
-        this.$store.dispatch('changeAva', this.image);
+        const img = this.image;
+        const id = this.user.id;
+        this.$store.dispatch('changeAva', {img, id});
       },
       triggerUpload () {
         this.$refs.fileInput.click();

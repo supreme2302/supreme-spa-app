@@ -17,6 +17,7 @@ export default class User {
     this.about = data.about;
     this.skills = data.skills;
     this.genres = data.genres;
+    this.image = data.image;
   }
 
   /**
@@ -157,7 +158,7 @@ export default class User {
 
   static changeAva (userData) {
     return new Promise((resolve, reject) => {
-      http.post(route.userAPIMethods.userChava, userData, (err, resp) => {
+      http.post(route.userAPIMethods.mediaChava, userData, (err, resp) => {
         if (err) {
           err
             .then(
@@ -188,7 +189,27 @@ export default class User {
     return http.get(route.userAPIMethods.genres, callbackfn);
   }
 
-  static loadImg (email, callbackfn) {
-    return http.get(route.userAPIMethods.userGava + '/' + email, callbackfn);
+  static loadImg (id, callbackfn) {
+    return http.get(route.userAPIMethods.mediaGava + '/' + id, callbackfn);
+  }
+
+  static getCommentsAboutUser (id, callbackfn) {
+    return http.get(route.userAPIMethods.commentsOfUser + '/' + id, callbackfn);
+  }
+
+  static sendComment (userData) {
+    return new Promise((resolve, reject) => {
+      http.post(route.userAPIMethods.sendComment, userData, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                reject(resErr.message);
+              }
+            );
+        }
+        resolve();
+      });
+    });
   }
 }

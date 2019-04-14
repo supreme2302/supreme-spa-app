@@ -2,7 +2,7 @@
 <template>
   <v-card>
     <v-img
-      :src="imgSrc"
+      :src="imgSrc + '/' + user.image"
       height="300px"
     >
       <v-layout
@@ -119,7 +119,9 @@
   import computeSize from '../../modules/util/computeSize.js';
   export default {
     data () {
-      return {};
+      return {
+        imgSrc: conf.serverUrl + conf.userAPIMethods.mediaGava,
+      };
     },
     methods: {
       resize () {
@@ -133,9 +135,6 @@
       },
       user () {
         return this.$store.getters.user;
-      },
-      imgSrc () {
-        return conf.serverUrl + conf.userAPIMethods.userGava + '/' + this.$store.getters.userCard.email;
       }
     },
     beforeRouteUpdate (to, from, next) {

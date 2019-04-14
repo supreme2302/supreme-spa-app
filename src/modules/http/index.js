@@ -62,7 +62,7 @@ class HttpService {
   static request (requestMethod, url, body) {
     const headers = new Headers();
     if (requestMethod === 'POST') {
-      if (url !== 'users/chava') {
+      if (url !== 'media/chava') {
         headers.append('Content-Type', 'application/json; charset=utf-8');
       }
     }
@@ -73,6 +73,7 @@ class HttpService {
       body: body,
       credentials: 'include'
     };
+    // return fetch(url, req);
     return fetch(`${config.serverUrl}${url}`, req);
   }
 }

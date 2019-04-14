@@ -7,13 +7,14 @@ import SignUp from '../components/common/SignUp.vue';
 import Profile from '../components/common/Profile.vue';
 import MainPage from '../components/leftSide/MainPage.vue';
 import Chat from '../components/leftSide/Chat/GenChat.vue';
-import Test from '../components/second_var/test.vue';
-import TestCard from '../components/second_var/test_card.vue';
+import Test from '../components/second_var/UserList.vue';
+import TestCard from '../components/second_var/TestUserPage.vue';
 import FullUserPage from '../components/second_var/FullUserPage.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
 import AuthGuardList from './auth-guard-list.js';
+import AuthGuardFetchComments from './auth-guard-fetch-comments.js';
 Vue.use(Router);
 
 export default new Router({
@@ -71,7 +72,8 @@ export default new Router({
       props: true,
       components: {
         bodyWrap: FullUserPage
-      }
+      },
+      beforeEnter: AuthGuardFetchComments
     },
     {
       path: '/auth',
