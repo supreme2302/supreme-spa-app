@@ -15,6 +15,7 @@ import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
 import AuthGuardList from './auth-guard-list.js';
 import AuthGuardFetchComments from './auth-guard-fetch-comments.js';
+import AuthGuardChat from './auth-guard-chat.js';
 Vue.use(Router);
 
 export default new Router({
@@ -46,7 +47,7 @@ export default new Router({
           components: {
             leftWrap: Chat
           },
-          beforeEnter: AuthGuard
+          beforeEnter: AuthGuardChat
         }
       ]
     },

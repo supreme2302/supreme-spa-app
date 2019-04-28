@@ -17,7 +17,7 @@
             <v-layout row>
               <v-flex xs3 md2>
                 <v-card-media
-                  :src="imgSrc + '/' + user.email"
+                  :src="imgSrc + '/' + user.image"
                   height="45px"
                   class="round mb-1 mt-1 ml-1"
                 />
@@ -48,7 +48,7 @@
             <v-layout row>
               <v-flex xs2>
                 <v-card-media
-                  :src="imgSrc + '/' + user.email"
+                  :src="imgSrc + '/' + user.image"
                   height="45px"
                   class="round mb-1 mt-1 ml-3 pict-size"
                 />
@@ -71,7 +71,7 @@
   export default {
     data () {
       return {
-        imgSrc: route.serverUrl + route.userAPIMethods.userGava
+        imgSrc: route.serverUrl + route.userAPIMethods.mediaGava
       };
     },
     computed: {

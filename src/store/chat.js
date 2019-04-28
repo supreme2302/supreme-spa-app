@@ -1,4 +1,5 @@
-
+import route from '../modules/conf';
+import store from '../store';
 const now = new Date();
 export default {
   state: {
@@ -16,14 +17,6 @@ export default {
           img: 'dist/images/2.png'
         },
         messages: [
-          // {
-          //   content: 'Hello，iam id1',
-          //   date: now
-          // }, {
-          //   content: 'onemore id1',
-          //   date: now,
-          //   self: true
-          // }
         ]
       }
     ],
@@ -39,12 +32,18 @@ export default {
         state.sessions = JSON.parse(data);
       }
     },
-    // 发送消息
-    SEND_MESSAGE (state, content) {
-      state.sessions[0].messages.push({
-        content: content,
-        self: true
-      });
+
+    SEND_MESSAGE (state, {recipientId, message}) {
+      console.log('SEND_MESSAGE');
+      for (let i = 0; i < state.sessions.length; ++i) {
+        if (state.sessions[i].id === recipientId) {
+          state.sessions[i].messages.push({
+            content: message,
+            self: true,
+            date: now
+          });
+        }
+      }
     },
     // 选择会话
     SELECT_SESSION (state, id) {
@@ -54,43 +53,41 @@ export default {
     SET_FILTER_KEY (state, value) {
       state.filterKey = value;
     },
-    GET_MESSAGE (state, {messages, sessionId, curUserEmail}) {
+    GET_MESSAGE (state, {messages, recipientId, senderId}) {
       let contains = false;
       let index = -1;
       for (let i = 0; i < state.sessions.length; ++i) {
         console.log('cycle  ', state.sessions[i].id);
-        if (state.sessions[i].id === sessionId) {
+        if (state.sessions[i].id === recipientId) {
           contains = true;
           index = i;
         }
       }
-      console.log('cont   ', contains);
       if (!contains) {
         state.sessions.push({
-          id: sessionId,
+          id: recipientId,
           user: {
             name: 'sosed',
-            img: 'dist/images/2.png'
+            img: route.serverUrl + route.userAPIMethods.mediaGava + '/'
           },
           messages: []
         });
         for (let i = 0; i < state.sessions.length; ++i) {
-          if (state.sessions[i].id === sessionId) {
+          if (state.sessions[i].id === recipientId) {
             for (let j = 0; j < messages.length; ++j) {
-              if (messages[j].sender === curUserEmail) {
+              if (messages[j].senderId === senderId) {
                 messages[j].self = true;
+                state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + store.getters.user.image;
+              } else {
+                state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
               }
               state.sessions[i].messages.push(messages[j]);
             }
           }
         }
       } else {
-        for (let i = 0; i < messages.length; ++i) {
-          if (messages[i].sender === curUserEmail) {
-            messages[i].self = true;
-            state.sessions[index].messages.push(messages[i]);
-          }
-        }
+        state.sessions[index].messages.push(messages);
+        state.sessions[index].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
       }
     }
   },

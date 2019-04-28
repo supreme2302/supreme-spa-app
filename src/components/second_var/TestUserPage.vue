@@ -2,7 +2,7 @@
 <template>
   <v-card>
     <v-img
-      :src="imgSrc + '/' + user.image"
+      :src="imgSrc + '/' + userCard.image"
       height="300px"
     >
       <v-layout
@@ -104,11 +104,6 @@
         </v-list-tile-content>
       </v-list-tile>
 
-      <!--<v-text-field>-->
-        <!--<p>{{userCard.about}}}</p>-->
-        <!--<v-list-tile-sub-title>About</v-list-tile-sub-title>-->
-      <!--</v-text-field>-->
-
     </v-list>
   </v-card>
 </template>
@@ -125,7 +120,6 @@
     },
     methods: {
       resize () {
-        // bus.emit('payloadForResize', {elements, displayStyle});
         window.addEventListener('resize', resizeCallback);
       },
     },

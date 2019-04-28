@@ -1,13 +1,10 @@
+<!--suppress HtmlUnknownTag -->
 <template>
-  <!--<div id="app">-->
-    <!---->
-  <!--</div>-->
   <div>
     <message/>
     <div class="kaka">
       <textarea placeholder="Wirte a message" class="kaka_70" v-model="content"></textarea>
-      <v-btn @click="sendd" class="kaka_30">Send</v-btn>
-      <!--<v-btn @click="connect">connect</v-btn>-->
+      <v-btn @click="send" class="kaka_30">Send</v-btn>
     </div>
   </div>
 </template>
@@ -31,42 +28,33 @@
       };
     },
     methods: {
-      send () {
-        if (this.content.length > 0) {
-          this.$store.dispatch('sendMessage', this.content);
-          // this.sendMessage(this.content);
-          this.content = '';
-        }
-      },
       connect () {
-        var pathname = document.location.pathname;
+        const pathname = document.location.pathname;
         ws = new WebSocket('ws://localhost:5002' + pathname);
-        let sessionId = pathname.split('/')[2];
+        let recipientId = pathname.split('/')[2];
         ws.onmessage = function (event) {
-          // var log = document.getElementById('log');
-          console.log(event.data);
-          var messages = JSON.parse(event.data);
-          const curUserEmail = this.$store.getters.user.email;
-          this.$store.dispatch('getMessage', {messages, sessionId, curUserEmail});
+          console.log('on message  ');
+          const messages = JSON.parse(event.data);
+          console.log(messages.recipientImage);
+          const senderId = this.$store.getters.user.id;
+          this.$store.dispatch('getMessage', {messages, recipientId, senderId});
         }.bind(this);
       },
-      sendd () {
+      send () {
         if (this.content.length > 0) {
-          var content = this.content;
-          const to = this.$store.getters.userCard.email;
+          const content = this.content;
+          let recipientId = document.location.pathname.split('/')[2];
           var json = JSON.stringify({
             'content': content,
-            // 'from': from
-            'recipient': to
+            'recipientId': recipientId
           });
-
           ws.send(json);
-          this.$store.dispatch('sendMessage', this.content);
-          // this.sendMessage(this.content);
+          const message = this.content;
+          this.$store.dispatch('sendMessage', {recipientId, message});
           this.content = '';
         }
       }
-    }
+    },
   };
 </script>
 

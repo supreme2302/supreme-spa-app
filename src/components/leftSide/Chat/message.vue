@@ -1,77 +1,38 @@
 <script>
-export default {
-  data: () => {
-    return {
-      // sessions: [
-      //   {
-      //     id: 1,
-      //     user: {
-      //       name: '示例介绍',
-      //       img: 'dist/images/2.png'
-      //     },
-      //     messages: [
-      //       {
-      //         content: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
-      //         date: now
-      //       }, {
-      //         content: '项目地址: https://github.com/coffcer/vue-chat',
-      //         date: now
-      //       }
-      //     ]
-      //   },
-      //   {
-      //     id: 2,
-      //     user: {
-      //       name: 'webpack',
-      //       img: 'dist/images/3.jpg'
-      //     },
-      //     messages: []
-      //   }
-      // ]
-    };
-  },
-  computed: {
-    session () {
-      const list = this.$store.getters.sessions;
-      console.log('list  ', list);
-      for (let i = 0; i < list.length; ++i) {
-        if (list[i].id === document.location.pathname.split('/')[2]) {
-          return list[i];
+  import conf from '../../../modules/conf/index.js';
+  export default {
+    data() {
+      return {
+        imgSrc: conf.serverUrl + conf.userAPIMethods.mediaGava + '/' + this.$store.getters.user.image
+      };
+    },
+    computed: {
+      session () {
+        const list = this.$store.getters.sessions;
+        console.log('list  ', list);
+        for (let i = 0; i < list.length; ++i) {
+          if (list[i].id === document.location.pathname.split('/')[2]) {
+            return list[i];
+          }
         }
       }
+  },
+    methods: {
     },
-    user () {
-      return this.$store.getters.user;
-    }
-  },
-  methods: {
-    printDeb () {
-      console.log(this.session);
-      console.log(this.$store.getters.session);
-    }
-  },
-  // vuex: {
-  //   getters: {
-  //     user: ({ user }) => user,
-  //     session: ({ sessions, currentSessionId }) => sessions.find(session => session.id === currentSessionId)
-  //   }
-  // },
-  filters: {
-        // 将日期过滤为 hour:minutes
-    time (date) {
-      if (typeof date === 'string') {
-        date = new Date(date);
+    filters: {
+      time (date) {
+        if (typeof date === 'string') {
+          date = new Date(date);
+        }
+        return date.getHours() + ':' + date.getMinutes();
       }
-      return date.getHours() + ':' + date.getMinutes();
-    }
   },
-  directives: {
-        // 发送消息后滚动到底部
-    'scroll-bottom' () {
-      this.vm.$nextTick(() => {
-        this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight;
-      });
-    }
+    directives: {
+      'scroll-bottom' () {
+        this.vm.$nextTick(() => {
+          this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight;
+        });
+      }
   }
 };
 </script>
@@ -84,7 +45,7 @@ export default {
                 <span>{{ item.date | time }}</span>
             </p>
             <div class="main" :class="{ self: item.self }">
-                <img class="avatar" width="30" height="30" :src="item.self ? user.img : session.user.img" />
+                <img class="avatar" width="30" height="30" :src="item.self ? imgSrc : session.user.img" />
                 <div class="text">{{ item.content }}</div>
             </div>
         </li>

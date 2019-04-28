@@ -30,7 +30,7 @@
       <v-layout row>
         <v-btn
           v-if="user"
-        :to="'/chat/' + userCard.email"
+        :to="'/chat/' + userCard.id"
         >
           Write message
         </v-btn>
