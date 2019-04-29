@@ -87,12 +87,29 @@
             this.$store.dispatch('getNextPageOfList', this.$store.getters.page);
           }
         });
+      },
+
+      connect () {
+        const pathname = document.location.pathname;
+        ws = new WebSocket('ws://localhost:5002' + pathname);
+        let recipientId = pathname.split('/')[2];
+        ws.onmessage = function (event) {
+          console.log('on message  ');
+          const messages = JSON.parse(event.data);
+          console.log(messages.recipientImage);
+          const senderId = this.$store.getters.user.id;
+          this.$store.dispatch('getMessage', {messages, recipientId, senderId});
+        }.bind(this);
       }
     },
     mounted () {
       this.scroll();
       // const div = document.getElementById('scrollDiv');
       // this.scrollDiv(div);
+    },
+
+    created () {
+      this.connect();
     }
   };
 </script>
