@@ -277,6 +277,7 @@ export default {
     },
 
     sendComment ({commit}, payload) {
+      console.log('sendComment');
       commit('clearError');
       commit('setLoading', true);
       const userData = JSON.stringify(payload);

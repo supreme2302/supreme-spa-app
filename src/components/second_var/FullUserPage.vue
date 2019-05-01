@@ -6,26 +6,37 @@
         <v-card flat>
           <v-card-media
             :src="imgSrc + '/' + userCard.image"
-            height="250px"
+            height="300px"
           ></v-card-media>
-          <v-card-title primary-title class="pb-0">
-            <div>
-              <p class="text--primary">Rating: {{userCard.rating}}</p>
-            <!--</div>-->
+          <!--<v-card-title primary-title class="pb-0">-->
             <!--<div>-->
-              <p class="text--primary">Username: {{userCard.username}}</p>
-              <p class="text--primary">Email: {{userCard.email}}</p>
-              <p class="text--primary">Phone: {{userCard.phone}}</p>
-            </div>
-          </v-card-title>
+              <!--<p class="text&#45;&#45;primary">Rating: {{userCard.rating}}</p>-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div>&ndash;&gt;-->
+              <!--<p class="text&#45;&#45;primary">Username: {{userCard.username}}</p>-->
+              <!--<p class="text&#45;&#45;primary">Email: {{userCard.email}}</p>-->
+              <!--<p class="text&#45;&#45;primary">Phone: {{userCard.phone}}</p>-->
+            <!--</div>-->
+          <!--</v-card-title>-->
         </v-card>
       </v-flex>
       <v-flex xs12 md9>
         <v-card>
           <v-card-text>
-            <div>Skills: {{userSkills}}</div>
-            <div>Genres: {{userCard.genres}}</div>
-            <div>About {{userCard.about}}</div>
+            <p>Rating: {{userCard.rating}}</p>
+            <v-divider ></v-divider>
+            <p>Username: {{userCard.username}}</p>
+            <v-divider ></v-divider>
+            <p>Email: {{userCard.email}}</p>
+            <v-divider ></v-divider>
+            <p>Phone: {{userCard.phone}}</p>
+            <v-divider ></v-divider>
+            <p>Skills: {{userCard.skills | arrayFilter}}</p>
+            <v-divider ></v-divider>
+            <p>Genres: {{userCard.genres | arrayFilter}}</p>
+            <v-divider></v-divider>
+            <p>About: {{userCard.about}}</p>
+            <v-divider></v-divider>
           </v-card-text>
         </v-card>
       </v-flex>
@@ -77,7 +88,7 @@
                 <v-img
                   class="white--text"
                   height="120px"
-                  :src="imgSrc + '/' + comment.fromEmail"></v-img>
+                  :src="imgSrc + '/' + comment.fromImage"></v-img>
               </v-card-title>
             </v-flex>
             <v-flex xs8 sm9>
@@ -94,10 +105,6 @@
                   <span>{{comment.commentVal}}</span>
                 </div>
               </v-card-title>
-              <!--<v-card-actions>-->
-              <!--<v-btn flat color="orange">Share</v-btn>-->
-              <!--<v-btn flat color="orange">Explore</v-btn>-->
-              <!--</v-card-actions>-->
             </v-flex>
           </v-layout>
         </v-card>
@@ -117,20 +124,21 @@
         commentVal: ''
       };
     },
-    computed: {
-      userCard() {
-        return this.$store.getters.userCard;
-      },
-      userSkills() {
-        const skills = this.userCard.skills;
+    filters: {
+      arrayFilter (data) {
         let str = '';
-        for (let i = 0; i < skills.length; ++i) {
-          str += skills[i].toString();
-          if (i != skills.length - 1) {
+        for (let i = 0; i < data.length; ++i) {
+          str += data[i];
+          if (i !== data.length - 1) {
             str += ', ';
           }
         }
         return str;
+      }
+    },
+    computed: {
+      userCard() {
+        return this.$store.getters.userCard;
       },
       comments() {
         return this.$store.getters.comments;
@@ -147,7 +155,8 @@
             fromEmail: this.$store.getters.user.email,
             rating: this.rating,
             fromUsername: this.$store.getters.user.username,
-            toUserId: this.userCard.id
+            toUserId: this.userCard.id,
+            fromImage: this.$store.getters.user.image
           };
           this.$store.dispatch('sendComment', data);
         }

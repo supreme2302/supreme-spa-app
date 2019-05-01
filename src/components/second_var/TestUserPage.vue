@@ -1,6 +1,8 @@
 <!--suppress HtmlUnknownTag -->
 <template>
-  <v-card>
+  <v-card
+    :to="'/test/' + userCard.id"
+  >
     <v-img
       :src="imgSrc + '/' + userCard.image"
       height="300px"
@@ -30,7 +32,9 @@
         <v-spacer></v-spacer>
 
         <v-card-title class="white--text pl-5 pt-5">
-          <div class="display-1 pl-5 pt-5">{{userCard.username}}</div>
+          <div class="display-1 pl-5 pt-5">
+            {{userCard.username}}
+          </div>
         </v-card-title>
       </v-layout>
     </v-img>
@@ -73,7 +77,7 @@
         </v-list-tile-action>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{userCard.skills}}</v-list-tile-title>
+          <v-list-tile-title>{{userCard.skills | arrayFilter}}</v-list-tile-title>
           <v-list-tile-sub-title>Skills</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
@@ -86,7 +90,7 @@
         </v-list-tile-action>
 
         <v-list-tile-content>
-          <v-list-tile-title>{{userCard.genres}}</v-list-tile-title>
+          <v-list-tile-title>{{userCard.genres | arrayFilter}}</v-list-tile-title>
           <v-list-tile-sub-title>Genres</v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
@@ -129,6 +133,18 @@
       },
       user () {
         return this.$store.getters.user;
+      }
+    },
+    filters: {
+      arrayFilter (data) {
+        let str = '';
+        for (let i = 0; i < data.length; ++i) {
+          str += data[i];
+          if (i !== data.length - 1) {
+            str += ', ';
+          }
+        }
+        return str;
       }
     },
     beforeRouteUpdate (to, from, next) {
