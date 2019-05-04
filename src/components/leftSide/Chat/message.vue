@@ -1,20 +1,23 @@
 <script>
   import conf from '../../../modules/conf/index.js';
   export default {
-    data() {
+    data () {
       return {
         imgSrc: conf.serverUrl + conf.userAPIMethods.mediaGava + '/' + this.$store.getters.user.image
       };
     },
     computed: {
       session () {
+        // bus.on('next', data => {
         const list = this.$store.getters.sessions;
         console.log('list  ', list);
+        console.log(document.location.pathname.split('/')[2]);
         for (let i = 0; i < list.length; ++i) {
           if (list[i].id === document.location.pathname.split('/')[2]) {
             return list[i];
           }
         }
+        // });
       }
   },
     methods: {
@@ -24,11 +27,12 @@
         if (typeof date === 'string') {
           date = new Date(date);
         }
+        // return '23:00';
         return date.getHours() + ':' + date.getMinutes();
       }
   },
     directives: {
-      'scroll-bottom' () {
+      scroll_bottom() {
         this.vm.$nextTick(() => {
           this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight;
         });

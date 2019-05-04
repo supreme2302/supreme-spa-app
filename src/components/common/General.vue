@@ -12,7 +12,7 @@
             :key="i"
             hover
             class="kaka"
-            :to="'/id/' + user.id"
+            :to="'/chat/' + user.id"
           >
             <v-layout row>
               <v-flex xs3 md2>
@@ -68,10 +68,12 @@
 
 <script>
   import route from '../../modules/conf';
+  import Ws from '../../modules/ws';
+  import bus from '../../modules/bus';
   export default {
     data () {
       return {
-        imgSrc: route.serverUrl + route.userAPIMethods.mediaGava
+        imgSrc: route.serverUrl + route.userAPIMethods.mediaGava,
       };
     },
     computed: {
@@ -89,18 +91,6 @@
         });
       },
 
-      connect () {
-        const pathname = document.location.pathname;
-        ws = new WebSocket('ws://localhost:5002' + pathname);
-        let recipientId = pathname.split('/')[2];
-        ws.onmessage = function (event) {
-          console.log('on message  ');
-          const messages = JSON.parse(event.data);
-          console.log(messages.recipientImage);
-          const senderId = this.$store.getters.user.id;
-          this.$store.dispatch('getMessage', {messages, recipientId, senderId});
-        }.bind(this);
-      }
     },
     mounted () {
       this.scroll();
@@ -109,7 +99,6 @@
     },
 
     created () {
-      this.connect();
     }
   };
 </script>

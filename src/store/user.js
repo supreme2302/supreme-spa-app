@@ -297,17 +297,17 @@ export default {
           }
         );
     },
-    signUpTest({ commit }, payload) {
-      console.log("signup action");
+    signUpTest ({ commit }, payload) {
+      console.log('signup action');
       const userData = JSON.stringify(payload);
       http.post('http://178.128.138.0:8090/admin/register', userData, (err, resp) => {
-        console.log("register done");
+        console.log('register done');
         if (err) {
           console.log(err);
         } else {
           console.log(resp);
           http.get('http://178.128.138.0:8090/admin/info', (er, res) => {
-            console.log("info done");
+            console.log('info done');
             if (er) {
               console.log(er);
             }
@@ -315,7 +315,7 @@ export default {
           });
         }
       });
-    },
+    }
   },
   getters: {
     users: state => state.users,

@@ -23,7 +23,8 @@ export default {
     // 当前选中的会话
     currentSessionId: 1,
     // 过滤出只包含这个key的会话
-    filterKey: ''
+    filterKey: '',
+    renderMessage: false
   },
   mutations: {
     INIT_DATA (state) {
@@ -53,6 +54,34 @@ export default {
     SET_FILTER_KEY (state, value) {
       state.filterKey = value;
     },
+
+    renderMessage (state, payload) {
+      state.renderMessage = payload;
+    },
+
+    getMessageRouteUpdate (state, {messages, recipientId, senderId}) {
+      state.sessions = [];
+      state.sessions.push({
+        id: recipientId,
+        user: {
+          name: 'sosed',
+          img: route.serverUrl + route.userAPIMethods.mediaGava + '/'
+        },
+        messages: []
+      });
+      for (let i = 0; i < state.sessions.length; ++i) {
+        if (state.sessions[i].id === recipientId) {
+          for (let j = 0; j < messages.length; ++j) {
+            if (messages[j].senderId === senderId) {
+              messages[j].self = true;
+            }
+            state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
+            state.sessions[i].messages.push(messages[j]);
+          }
+        }
+      }
+    },
+
     GET_MESSAGE (state, {messages, recipientId, senderId}) {
       let contains = false;
       let index = -1;
@@ -77,21 +106,22 @@ export default {
             for (let j = 0; j < messages.length; ++j) {
               if (messages[j].senderId === senderId) {
                 messages[j].self = true;
-                state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + store.getters.user.image;
-              } else {
-                state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
               }
+              state.sessions[i].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
               state.sessions[i].messages.push(messages[j]);
             }
           }
         }
       } else {
         state.sessions[index].messages.push(messages);
-        state.sessions[index].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages[j].recipientImage;
+        state.sessions[index].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages.recipientImage;
       }
     }
   },
   actions: {
+    getMessageRouteUpdate ({commit}, payload) {
+      commit('getMessageRouteUpdate', payload);
+    },
     initData: ({ dispatch }) => dispatch('INIT_DATA'),
     // sendMessage: ({ dispatch }, content) => dispatch('SEND_MESSAGE', content)
     sendMessage ({commit}, payload) {
@@ -104,7 +134,8 @@ export default {
     search: ({ dispatch }, value) => dispatch('SET_FILTER_KEY', value)
   },
   getters: {
-    sessions: (state) => state.sessions
+    sessions: (state) => state.sessions,
+    renderMessage: state => state.renderMessage,
     // user: state => state.user
   }
 };

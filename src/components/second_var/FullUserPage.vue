@@ -6,18 +6,16 @@
         <v-card flat>
           <v-card-media
             :src="imgSrc + '/' + userCard.image"
-            height="300px"
-          ></v-card-media>
-          <!--<v-card-title primary-title class="pb-0">-->
-            <!--<div>-->
-              <!--<p class="text&#45;&#45;primary">Rating: {{userCard.rating}}</p>-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--&lt;!&ndash;<div>&ndash;&gt;-->
-              <!--<p class="text&#45;&#45;primary">Username: {{userCard.username}}</p>-->
-              <!--<p class="text&#45;&#45;primary">Email: {{userCard.email}}</p>-->
-              <!--<p class="text&#45;&#45;primary">Phone: {{userCard.phone}}</p>-->
-            <!--</div>-->
-          <!--</v-card-title>-->
+            height="255px"
+          />
+          <v-card-action>
+            <v-btn
+              block
+              color="grey darken-4 hover"
+              dark
+              :to="'/chat/' + userCard.id"
+            >Write a message</v-btn>
+          </v-card-action>
         </v-card>
       </v-flex>
       <v-flex xs12 md9>

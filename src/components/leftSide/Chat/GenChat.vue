@@ -1,7 +1,9 @@
 <!--suppress HtmlUnknownTag -->
 <template>
   <div>
-    <message/>
+    <template v-if="renderMessage">
+      <message/>
+    </template>
     <div class="kaka">
       <textarea placeholder="Wirte a message" class="kaka_70" v-model="content"></textarea>
       <v-btn @click="send" class="kaka_30">Send</v-btn>
@@ -12,10 +14,28 @@
 <script>
   import Text from './text.vue';
   import Message from './message.vue';
-  var ws;
+  import Ws from '../../../modules/ws';
+  import bus from '../../../modules/bus';
   export default {
     created () {
       this.connect();
+      this.$store.commit('renderMessage', true);
+    },
+    beforeRouteUpdate (to, from, next) {
+      const recipientId = to.params.id;
+      const senderId = this.$store.getters.user.id;
+      this.ws.send({class: 'GetMessagesRouteUpdate', senderId: senderId, recipientId: recipientId});
+      this.$store.commit('renderMessage', false);
+      bus.on('GetMessagesRouteUpdate', data => {
+        console.log('GetMessagesRouteUpdate');
+        const messages = data.payload.messages;
+        console.log(messages);
+        this.$store.dispatch('getMessageRouteUpdate', {messages, recipientId: recipientId, senderId})
+          .then(() => {
+            next();
+            this.$store.commit('renderMessage', true);
+          });
+      });
     },
     name: 'GenChat',
     components: {
@@ -24,31 +44,35 @@
     },
     data () {
       return {
-        content: ''
+        content: '',
+        ws: new Ws()
       };
+    },
+    computed: {
+      renderMessage () {
+        return this.$store.getters.renderMessage;
+      },
     },
     methods: {
       connect () {
-        const pathname = document.location.pathname;
-        ws = new WebSocket('ws://localhost:5002' + pathname);
-        let recipientId = pathname.split('/')[2];
-        ws.onmessage = function (event) {
-          console.log('on message  ');
-          const messages = JSON.parse(event.data);
-          console.log(messages.recipientImage);
-          const senderId = this.$store.getters.user.id;
-          this.$store.dispatch('getMessage', {messages, recipientId, senderId});
-        }.bind(this);
+        const senderId = this.$store.getters.user.id;
+        bus.on('connected', data => {
+          this.ws.send({class: 'GetMessages', senderId: senderId, recipientId: document.location.pathname.split('/')[2]});
+          bus.on('GetMessages', data => {
+            const messages = data.payload.messages;
+            this.$store.dispatch('getMessage', {messages, recipientId: document.location.pathname.split('/')[2], senderId});
+          });
+          bus.on('ChatMessage', data => {
+            const messages = data.payload;
+            this.$store.dispatch('getMessage', {messages, recipientId: document.location.pathname.split('/')[2], senderId});
+          });
+        });
       },
       send () {
         if (this.content.length > 0) {
           const content = this.content;
           let recipientId = document.location.pathname.split('/')[2];
-          var json = JSON.stringify({
-            'content': content,
-            'recipientId': recipientId
-          });
-          ws.send(json);
+          this.ws.send({class: 'ChatMessage', content: content, recipientId: recipientId});
           const message = this.content;
           this.$store.dispatch('sendMessage', {recipientId, message});
           this.content = '';
