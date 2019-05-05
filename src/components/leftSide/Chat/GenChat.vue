@@ -18,8 +18,8 @@
   import bus from '../../../modules/bus';
   export default {
     created () {
+      this.$store.commit('renderMessage', false);
       this.connect();
-      this.$store.commit('renderMessage', true);
     },
     beforeRouteUpdate (to, from, next) {
       const recipientId = to.params.id;
@@ -29,7 +29,6 @@
       bus.on('GetMessagesRouteUpdate', data => {
         console.log('GetMessagesRouteUpdate');
         const messages = data.payload.messages;
-        console.log(messages);
         this.$store.dispatch('getMessageRouteUpdate', {messages, recipientId: recipientId, senderId})
           .then(() => {
             next();
@@ -51,20 +50,30 @@
     computed: {
       renderMessage () {
         return this.$store.getters.renderMessage;
-      },
+      }
     },
     methods: {
       connect () {
         const senderId = this.$store.getters.user.id;
-        bus.on('connected', data => {
-          this.ws.send({class: 'GetMessages', senderId: senderId, recipientId: document.location.pathname.split('/')[2]});
-          bus.on('GetMessages', data => {
-            const messages = data.payload.messages;
-            this.$store.dispatch('getMessage', {messages, recipientId: document.location.pathname.split('/')[2], senderId});
-          });
-          bus.on('ChatMessage', data => {
-            const messages = data.payload;
-            this.$store.dispatch('getMessage', {messages, recipientId: document.location.pathname.split('/')[2], senderId});
+        this.ws.send({class: 'GetMessages', senderId: senderId, recipientId: document.location.pathname.split('/')[2]});
+        this.$store.commit('renderMessage', false);
+        bus.on('GetMessages', data => {
+          const messages = data.payload.messages;
+          this.$store.dispatch('getMessageRouteUpdate', {
+            messages,
+            recipientId: document.location.pathname.split('/')[2],
+            senderId
+          })
+            .then(() => {
+              this.$store.commit('renderMessage', true);
+            });
+        });
+        bus.on('ChatMessage', data => {
+          const messages = data.payload;
+          this.$store.dispatch('getMessage', {
+            messages,
+            recipientId: document.location.pathname.split('/')[2],
+            senderId
           });
         });
       },
@@ -78,7 +87,7 @@
           this.content = '';
         }
       }
-    },
+    }
   };
 </script>
 

@@ -10,6 +10,7 @@ import Chat from '../components/leftSide/Chat/GenChat.vue';
 import Test from '../components/second_var/UserList.vue';
 import TestCard from '../components/second_var/TestUserPage.vue';
 import FullUserPage from '../components/second_var/FullUserPage.vue';
+import Messages from '../components/common/Messages.vue';
 import AuthGuardLoad from './auth-guard-load.js';
 import AuthGuard from './auth-guard.js';
 import AuthGuardFetch from './auth-guard-fetch.js';
@@ -94,6 +95,13 @@ export default new Router({
       path: '/profile',
       components: {
         bodyWrap: Profile
+      },
+      beforeEnter: AuthGuard
+    },
+    {
+      path: '/messages',
+      components: {
+        bodyWrap: Messages
       },
       beforeEnter: AuthGuard
     }

@@ -112,7 +112,13 @@
 </template>
 
 <script>
+  import bus from './modules/bus';
   export default {
+    created() {
+      bus.on('ChatMessage', data => {
+
+      });
+    },
     data () {
       return {
         drawer: false,
@@ -148,6 +154,11 @@
               title: 'Profile',
               icon: 'person',
               url: '/profile'
+            },
+            {
+              title: 'Messages',
+              icon: 'message',
+              url: '/messages'
             }
           ];
         }

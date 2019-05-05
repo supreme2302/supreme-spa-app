@@ -23,7 +23,8 @@ const userAPIMethods = {
   commentsOfUser: 'users/get-comments',
   sendComment: 'users/add-comment',
   mediaChava: 'media/chava',
-  mediaGava: 'media'
+  mediaGava: 'media',
+  allMessages: 'users/messages'
 };
 
 export default {serverUrl, userAPIMethods};

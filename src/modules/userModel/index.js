@@ -177,6 +177,10 @@ export default class User {
     return http.get(route.userAPIMethods.userCard + '/' + id.toString(), callbackfn);
   }
 
+  static getAllMessages(id, callbackfn) {
+    return http.get(route.userAPIMethods.allMessages + '/' + id.toString(), callbackfn);
+  }
+
   static sendSkillFilter (page, params, callbaclfn) {
     return http.get(route.userAPIMethods.usersList + '/' + page.toString() + params, callbaclfn);
   }

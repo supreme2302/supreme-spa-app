@@ -10,10 +10,10 @@
       session () {
         // bus.on('next', data => {
         const list = this.$store.getters.sessions;
-        console.log('list  ', list);
         console.log(document.location.pathname.split('/')[2]);
         for (let i = 0; i < list.length; ++i) {
           if (list[i].id === document.location.pathname.split('/')[2]) {
+            console.log('list  ', list[i]);
             return list[i];
           }
         }
@@ -27,8 +27,8 @@
         if (typeof date === 'string') {
           date = new Date(date);
         }
-        // return '23:00';
-        return date.getHours() + ':' + date.getMinutes();
+        return '23:00';
+        // return date.getHours() + ':' + date.getMinutes();
       }
   },
     directives: {

@@ -1,6 +1,8 @@
 import User from '../modules/userModel';
 import router from '../router';
 import http from '../modules/http';
+import Ws from '../modules/ws';
+import bus from '../modules/bus';
 
 export default {
   state: {
@@ -9,10 +11,15 @@ export default {
     userCard: null,
     page: 1,
     img: null,
-    comments: []
+    comments: [],
+    allMessages: []
   },
   mutations: {
+    setAllMessages (state, messages) {
+      state.allMessages = messages;
+    },
     setUser (state, user) {
+      const ws = new Ws();
       state.user = user;
     },
     setConcatList (state, list) {
@@ -297,6 +304,31 @@ export default {
           }
         );
     },
+
+    loadAllMessages ({commit}, payload) {
+      console.log('loadAllMessages');
+      commit('clearError');
+      commit('setLoading', true);
+      const userData = JSON.stringify(payload);
+      User.getAllMessages(userData, (err, resp) => {
+        if (err) {
+          err
+            .then(
+              resErr => {
+                commit('setError', resErr.message);
+                commit('setLoading', false);
+              }
+            );
+        } else {
+          resp.then(
+            userData => {
+              commit('setAllMessages', userData);
+              commit('setLoading', false);
+            }
+          );
+        }
+      });
+    },
     signUpTest ({ commit }, payload) {
       console.log('signup action');
       const userData = JSON.stringify(payload);
@@ -324,6 +356,7 @@ export default {
     userCard: state => state.userCard,
     page: state => state.page,
     img: state => state.img,
-    comments: state => state.comments
+    comments: state => state.comments,
+    allMessages: state => state.allMessages
   }
 };

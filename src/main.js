@@ -10,6 +10,7 @@ import User from './modules/userModel';
 import bus from './modules/bus';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
+import Ws from './modules/ws';
 Vue.use(Vuetify, axios, VueAxios);
 
 Vue.config.productionTip = false;
@@ -24,21 +25,26 @@ new Vue({
   },
   template: '<App/>',
   created () {
-    this.$store.dispatch('renderPermission', false);
-    User.auth()
-      .then(
-        user => {
-          if (user) {
-            this.$store.dispatch('autoSignIn', user);
-            // bus.emit('onAuth', user);
+    const ws = new Ws();
+    bus.on('connected', () => {
+      this.$store.dispatch('renderPermission', false);
+      User.auth()
+        .then(
+          user => {
+            if (user) {
+              // bus.on('connected', () => {
+              this.$store.dispatch('autoSignIn', user);
+              // });
+            }
+            this.$store.dispatch('renderPermission', true);
+            bus.emit('onAuth', user);
           }
-          this.$store.dispatch('renderPermission', true);
-          bus.emit('onAuth', user);
-        }
-      );
-    this.$store.dispatch('fetchUsers');
+        );
+      this.$store.dispatch('fetchUsers');
+    });
   }
 });
-// todo на полной странице под авой сделать кнопку перехода в чат
 // todo страница сообщений
-// todo если обновить страницу на чате, то юзеркард 0 ?
+// todo в профиле под фоткой поправить скиллы и жанры
+// todo проверить будет ли работать GET_MESSAGE без условия if при получении одного сообщения
+// todo подумать над тем, чтобы соединение не открывалось без логина

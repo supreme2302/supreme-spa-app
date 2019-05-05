@@ -113,6 +113,7 @@ export default {
           }
         }
       } else {
+        console.log('else(((');
         state.sessions[index].messages.push(messages);
         state.sessions[index].user.img = route.serverUrl + route.userAPIMethods.mediaGava + '/' + messages.recipientImage;
       }
