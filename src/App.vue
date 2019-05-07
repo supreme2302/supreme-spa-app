@@ -78,6 +78,14 @@
             {{ link.title }}
           </v-btn>
           <v-btn
+            to="/messages"
+            v-if="isUserLoggedIn"
+            flat
+          >
+            <v-icon left :color="messageColor">message</v-icon>
+            Messages
+          </v-btn>
+          <v-btn
             @click="onLogout"
             v-if="isUserLoggedIn"
             flat
@@ -116,12 +124,13 @@
   export default {
     created() {
       bus.on('ChatMessage', data => {
-
+        this.messageColor = 'red';
       });
     },
     data () {
       return {
         drawer: false,
+        messageColor: 'white'
       };
     },
     methods: {
@@ -155,11 +164,11 @@
               icon: 'person',
               url: '/profile'
             },
-            {
-              title: 'Messages',
-              icon: 'message',
-              url: '/messages'
-            }
+            // {
+            //   title: 'Messages',
+            //   icon: 'message',
+            //   url: '/messages'
+            // }
           ];
         }
         return [

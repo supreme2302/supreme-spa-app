@@ -54,9 +54,8 @@
           <v-flex xs8 sm9>
             <v-card-title>
               <div>
-                <span class="grey--text">Number 10</span><br>
-                <span>Whitehaven Beach</span><br>
-                <span>Whitsunday Island, Whitsunday Islands</span>
+                <span class="grey--text">{{ user.username }}</span><br>
+                <span>{{ user.about }}</span>
               </div>
             </v-card-title>
             <!--<v-card-actions>-->
@@ -89,6 +88,7 @@
     },
     computed: {
       users () {
+        console.log('users ', this.$store.getters.users);
         return this.$store.getters.users;
       },
 

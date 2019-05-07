@@ -9,20 +9,20 @@
         :to="'/chat/' + message.senderId"
       >
         <v-layout>
-          <v-flex xs4 sm3>
+          <v-flex xs1>
             <v-card-title>
-              <!--<v-img-->
-                <!--class="white&#45;&#45;text"-->
-                <!--height="120px"-->
-                <!--:src="imgSrc + '/' + user.image"-->
-              <!--/>-->
+              <v-img
+                class="white--text"
+                height="70px"
+                :src="imgSrc + '/' + message.recipientImage"
+              />
             </v-card-title>
           </v-flex>
           <v-flex xs8 sm9>
             <v-card-title>
               <div>
-                <span class="grey--text">{{ message.recipientImage }}</span><br>
-                <span>{{ message.senderId }}</span><br>
+                <span class="grey--text">{{ message.senderEmail }}</span><br>
+                <span>{{ message.content }}</span><br>
               </div>
             </v-card-title>
           </v-flex>
@@ -33,7 +33,13 @@
 </template>
 
 <script>
+  import route from '../../modules/conf';
   export default {
+    data () {
+      return {
+        imgSrc: route.serverUrl + route.userAPIMethods.mediaGava,
+      }
+    },
     created() {
       this.$store.dispatch('loadAllMessages', this.user.id);
     },
@@ -43,10 +49,6 @@
       },
       user() {
         return this.$store.getters.user;
-      }
-    },
-    data() {
-      return {
       }
     }
   };
