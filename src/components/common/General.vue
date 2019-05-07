@@ -43,7 +43,7 @@
             :key="i"
             hover
             class="kaka"
-            :to="'/id/' + user.id"
+            :to="'/chat/' + user.id"
           >
             <v-layout row>
               <v-flex xs2>
@@ -78,7 +78,10 @@
     },
     computed: {
       users () {
-        return this.$store.getters.users;
+        return this.$store.getters.users.filter(u => this.user.username !== u.username);
+      },
+      user () {
+        return this.$store.getters.user;
       }
     },
     methods: {

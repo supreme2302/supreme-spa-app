@@ -1,11 +1,11 @@
 import bus from '../bus';
-
+import route from '../conf';
 export default class Ws {
   constructor () {
     if (Ws.__instance) {
       return Ws.__instance;
     }
-    const address = 'ws://localhost:5002/chat';
+    const address = 'ws://' + route.address + '/chat';
     this.ws = new WebSocket(address);
     this.ws.onopen = (event) => {
       console.log(`WebSocket on address ${address} opened`);

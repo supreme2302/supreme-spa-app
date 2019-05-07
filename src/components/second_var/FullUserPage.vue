@@ -156,13 +156,14 @@
             toUserId: this.userCard.id,
             fromImage: this.$store.getters.user.image
           };
-          this.$store.dispatch('sendComment', data);
+          this.$store.dispatch('sendComment', data)
+            .then(() => this.$store.dispatch('openCard', this.userCard.id))
         }
       }
     },
     beforeRouteUpdate (to, from, next) {
       const id = Number(to.params.id);
-      this.$store.dispatch('openCard', {id, next});
+      this.$store.dispatch('openCard', id).then(() => next());;
       store.dispatch('getCommentsOfUser', {id, next});
     }
   };

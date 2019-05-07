@@ -40,7 +40,7 @@
         hover
         v-for="(user, i) in users"
         :key="i"
-        :to="'/test/idd/' + user.id"
+        :to="'/list/id/' + user.id"
       >
         <v-layout>
           <v-flex xs4 sm3>
@@ -58,10 +58,6 @@
                 <span>{{ user.about }}</span>
               </div>
             </v-card-title>
-            <!--<v-card-actions>-->
-              <!--<v-btn flat color="orange">Share</v-btn>-->
-              <!--<v-btn flat color="orange">Explore</v-btn>-->
-            <!--</v-card-actions>-->
           </v-flex>
         </v-layout>
       </v-card>

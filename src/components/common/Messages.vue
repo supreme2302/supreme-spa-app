@@ -34,6 +34,7 @@
 
 <script>
   import route from '../../modules/conf';
+  import bus from '../../modules/bus';
   export default {
     data () {
       return {
@@ -42,6 +43,10 @@
     },
     created() {
       this.$store.dispatch('loadAllMessages', this.user.id);
+    },
+    beforeRouteEnter(to, from, next) {
+      bus.emit('read', {});
+      next();
     },
     computed: {
       messages() {

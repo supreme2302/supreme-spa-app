@@ -16,7 +16,7 @@
                 <img src="https://randomuser.me/api/portraits/men/85.jpg" >
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>Supreme S.S</v-list-tile-title>
+                <v-list-tile-title v-if="isUserLoggedIn">{{user.email}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
@@ -38,6 +38,19 @@
               <v-list-tile-title>{{ link.title }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+
+          <v-list-tile
+            to="/messages"
+            v-if="isUserLoggedIn"
+          >
+            <v-list-tile-action>
+              <v-icon>message</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title v-text="'Messages'"/>
+            </v-list-tile-content>
+          </v-list-tile>
+
           <v-list-tile
             @click="onLogout"
             v-if="isUserLoggedIn"
@@ -61,7 +74,8 @@
         class="hidden-md-and-up"
       />
       <v-toolbar-title>
-        <router-link to="/test" tag="span" class="pointer"> Supreme </router-link>
+        <router-link to="/list" tag="span" class="pointer"> Supreme </router-link>
+        <span v-if="isUserLoggedIn"> | {{ user.username }} </span>
       </v-toolbar-title>
       <v-spacer/>
       <transition
@@ -126,6 +140,9 @@
       bus.on('ChatMessage', data => {
         this.messageColor = 'red';
       });
+      bus.on('read', data => {
+        this.messageColor = 'white';
+      });
     },
     data () {
       return {
@@ -141,12 +158,15 @@
         this.$store.dispatch('logoutUser')
           .then(
             () => {
-              this.$router.push('/');
+              this.$router.push('/list');
             }
           );
       },
     },
     computed: {
+      user () {
+        return this.$store.getters.user;
+      },
       error () {
         return this.$store.getters.error;
       },

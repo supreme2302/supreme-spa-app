@@ -71,8 +71,7 @@ export default {
     setImg ({commit}, payload) {
       commit('setImg', payload);
     },
-    openCard ({commit}, payload) {
-      const id = payload.id;
+    openCard ({commit}, id) {
       commit('clearError');
       const userId = JSON.stringify(id);
       User.getCard(userId, (err, resp) => {
@@ -86,7 +85,6 @@ export default {
         } else {
           resp.then(
             userData => {
-              payload.next();
               commit('setUserCard', userData);
             }
           );

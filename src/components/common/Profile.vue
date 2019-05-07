@@ -13,7 +13,8 @@
           <div>
             <p class="text--primary">E-mail: {{user.email}}</p>
             <p class="text--primary">Phone: {{user.phone}}</p>
-            <p class="text--primary">Skills: {{user.skills}}</p>
+            <p class="text--primary">Skills: {{user.skills | arrayFilter }}</p>
+            <p class="text--primary">Genres: {{user.genres | arrayFilter }}</p>
             <p class="text--primary">About: {{user.about}}</p>
           </div>
         </v-card-title>
@@ -233,12 +234,6 @@
             @change="onFileChange"
           />
         </v-card-actions>
-        <!--<img-->
-          <!--:src="imageSrc"-->
-          <!--v-if="imageSrc"-->
-          <!--height="100"-->
-          <!--class="offset-img"-->
-        <!--/>-->
       </v-card>
       <v-layout row>
         <v-flex xs12>
@@ -339,7 +334,19 @@
       genreTips () {
         return this.$store.getters.genres.map(genre => ({name: genre}));
       }
-    }
+    },
+    filters: {
+      arrayFilter (data) {
+        let str = '';
+        for (let i = 0; i < data.length; ++i) {
+          str += data[i];
+          if (i !== data.length - 1) {
+            str += ', ';
+          }
+        }
+        return str;
+      }
+    },
   };
 </script>
 

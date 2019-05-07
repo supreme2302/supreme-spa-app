@@ -1,7 +1,7 @@
 <!--suppress HtmlUnknownTag -->
 <template>
   <v-card
-    :to="'/test/' + userCard.id"
+    :to="'/user/' + userCard.id"
   >
     <v-img
       :src="imgSrc + '/' + userCard.image"
@@ -149,7 +149,7 @@
     },
     beforeRouteUpdate (to, from, next) {
       const id = Number(to.params.id);
-      this.$store.dispatch('openCard', {id, next});
+      this.$store.dispatch('openCard', id).then(() => next());;
     },
     mounted () {
 
