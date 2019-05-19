@@ -27,7 +27,6 @@
                 placeholder="Phone"
                 type="text"
                 class="pt-0"
-                :rules="phoneRules"
                 v-model="phone"
               />
               <v-text-field
@@ -62,6 +61,43 @@
                       close
                       class="chip--select-multi"
                       @input="remove(data.item)"
+                    >
+                      {{ data.item.name }}
+                    </v-chip>
+                  </template>
+                  <template
+                    slot="item"
+                    slot-scope="data"
+                  >
+                    <v-list-tile-content>
+                      <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                    </v-list-tile-content>
+                  </template>
+                </v-autocomplete>
+              </v-flex>
+
+              <v-flex xs12>
+                <v-autocomplete
+                  prepend-icon="info"
+                  v-model="genres"
+                  :disabled="isUpdating"
+                  :items="genreTips"
+                  chips
+                  label="Genres"
+                  item-text="name"
+                  item-value="name"
+                  multiple
+                  hide-selected
+                >
+                  <template
+                    slot="selection"
+                    slot-scope="data"
+                  >
+                    <v-chip
+                      :selected="data.selectedGenres"
+                      close
+                      class="chip--select-multi"
+                      @input="removeGenres(data.item)"
                     >
                       {{ data.item.name }}
                     </v-chip>
@@ -128,7 +164,6 @@
               placeholder="Phone"
               type="text"
               class="pt-0"
-              :rules="phoneRules"
               v-model="phone"
             />
             <v-text-field
@@ -198,7 +233,7 @@
                     :selected="data.selectedGenres"
                     close
                     class="chip--select-multi"
-                    @input="remove(data.item)"
+                    @input="removeGenres(data.item)"
                   >
                     {{ data.item.name }}
                   </v-chip>
@@ -319,6 +354,10 @@
       remove (item) {
         const index = this.skills.indexOf(item.name)
         if (index >= 0) this.skills.splice(index, 1)
+      },
+      removeGenres (item) {
+        const index = this.genres.indexOf(item.name)
+        if (index >= 0) this.genres.splice(index, 1)
       }
     },
     computed: {
@@ -338,10 +377,12 @@
     filters: {
       arrayFilter (data) {
         let str = '';
-        for (let i = 0; i < data.length; ++i) {
-          str += data[i];
-          if (i !== data.length - 1) {
-            str += ', ';
+        if (data !== null) {
+          for (let i = 0; i < data.length; ++i) {
+            str += data[i];
+            if (i !== data.length - 1) {
+              str += ', ';
+            }
           }
         }
         return str;

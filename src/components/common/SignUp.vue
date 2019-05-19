@@ -96,7 +96,7 @@
             password: this.password,
             confirmPassword: this.confirmPassword
           }
-          this.$store.dispatch('signUpUser', data)
+          this.$store.dispatch('signUpUser', data);
         }
       }
     }

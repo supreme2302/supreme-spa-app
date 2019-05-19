@@ -27,8 +27,8 @@
         if (typeof date === 'string') {
           date = new Date(date);
         }
-        return '23:00';
-        // return date.getHours() + ':' + date.getMinutes();
+        // return '23:00';
+        return date.getHours() + ':' + date.getMinutes();
       }
   },
     directives: {

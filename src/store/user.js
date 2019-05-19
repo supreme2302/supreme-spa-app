@@ -106,6 +106,7 @@ export default {
             commit('renderPermission', true);
             commit('setLoading', false);
             router.push('/');
+            location.reload();
           }
         )
         .catch(
@@ -128,6 +129,7 @@ export default {
             commit('renderPermission', true);
             commit('setLoading', false);
             router.push('/');
+            location.reload();
           }
         )
         .catch(
